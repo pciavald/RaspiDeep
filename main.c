@@ -6,7 +6,7 @@
 /*   By: pciavald <pciavald@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/14 19:10:49 by pciavald          #+#    #+#             */
-/*   Updated: 2015/05/14 19:46:59 by pciavald         ###   ########.fr       */
+/*   Updated: 2015/05/14 19:51:41 by pciavald         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,11 @@
 int		main(void)
 {
 	gpio_init();
-	gpio_out(4);
+	gpio_in(4);
 	while (42)
 	{
-		// Toggle pin 7 (blink a led!)
-		gpio_on(4);
-		sleep(1);
-
-		gpio_off(4);
-		sleep(1);
+		if (GPIO_READ(4) == 1)
+			printf("magnet\n");
 	}
-
 	return 0;
 }
