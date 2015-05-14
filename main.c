@@ -6,7 +6,7 @@
 /*   By: pciavald <pciavald@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/14 19:10:49 by pciavald          #+#    #+#             */
-/*   Updated: 2015/05/14 19:51:41 by pciavald         ###   ########.fr       */
+/*   Updated: 2015/05/14 20:01:21 by pciavald         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ int		main(void)
 	gpio_in(4);
 	while (42)
 	{
-		if (GPIO_READ(4) == 1)
-			printf("magnet\n");
+		printf("%i\n", GPIO_READ(4));
 	}
 	return 0;
 }
