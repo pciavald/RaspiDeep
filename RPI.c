@@ -6,7 +6,7 @@
 /*   By: pciavald <pciavald@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/14 18:46:49 by pciavald          #+#    #+#             */
-/*   Updated: 2015/05/14 19:51:42 by pciavald         ###   ########.fr       */
+/*   Updated: 2015/05/14 20:26:43 by pciavald         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 #include <fcntl.h>
 
 t_bcm2835_peripheral gpio = {GPIO_BASE, 0, 0, 0};
+
+int		gpio_state(int pin, int mode)
+{
+	if (GPIO_READ(pin) == 16)
+		return (mode == UP ? 1 : 0);
+	return (mode == DN ? 1 : 0);
+}
 
 void	gpio_on(int pin)
 {

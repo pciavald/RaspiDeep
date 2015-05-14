@@ -6,7 +6,7 @@
 /*   By: pciavald <pciavald@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/05/14 18:38:50 by pciavald          #+#    #+#             */
-/*   Updated: 2015/05/14 19:42:15 by pciavald         ###   ########.fr       */
+/*   Updated: 2015/05/14 20:26:53 by pciavald         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@
 # define GPIO_CLR			*(gpio.addr + 10)
 # define GPIO_READ(g)		*(gpio.addr + 13) &= (1<<(g))
 
+# define UP		1
+# define DN		0
+
 typedef struct				s_bcm2835_peripheral
 {
     unsigned long			addr_p;
@@ -43,6 +46,7 @@ void	gpio_off(int pin);
 void	gpio_in(int pin);
 void	gpio_out(int pin);
 int		gpio_init(void);
+int		gpio_state(int pin, int mode);
 int		map_peripheral(t_bcm2835_peripheral * p);
 void	unmap_peripheral(t_bcm2835_peripheral * p);
 
