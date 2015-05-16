@@ -9,16 +9,35 @@
 SSID="Ocean71"
 PWD="Raspberry71"
 
-# add source for TFT
-curl -SLs https://apt.adafruit.com/add | sudo bash
+# add source for TFT and update apt
+#curl -SLs https://apt.adafruit.com/add | sudo bash
 
 # upgrade and install software
 sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get install -y hostapd udhcpd vim build-essential adafruit-pitft-helper tightvncserver
+sudo apt-get autoremove sonic-pi
+sudo apt-get upgrade -y
+sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver
 
 # get the TFT ready
-sudo adafruit-pitft-helper -t 28r
+#cd
+#wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-bin-adafruit.deb
+#wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-dev-adafruit.deb
+#wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-doc-adafruit.deb
+#wget http://adafruit-download.s3.amazonaws.com/libraspberrypi0-adafruit.deb
+#wget http://adafruit-download.s3.amazonaws.com/raspberrypi-bootloader-adafruit-112613.deb
+#sudo dpkg -i -B *.deb
+#rm *.deb
+#sudo mv /usr/share/X11/xorg.conf.d/99-fbturbo.conf ~
+#sudo echo "
+#spi-bcm2708
+#fbtft_device" >> /etc/modules
+#sudo echo "
+#options fbtft_device name=adafruitts rotate=90 frequency=32000000
+#" >> /etc/modprobe.d/adafruit.conf
+#sudo echo "export FRAMEBUFFER=/dev/fb1" >> .profile
+
+# get the TFT ready
+#sudo adafruit-pitft-helper -t 28r
 
 # get the right version of hostapd
 wget http://dl.dropbox.com/u/1663660/hostapd/hostapd
@@ -127,6 +146,7 @@ esac
 
 exit 0' > /etc/init.d/vncboot
 sudo chmod 755 /etc/init.d/vncboot
-sudo update-rc.d /etc/init.d/vncboot defaults
+sudo update-rc.d vncboot defaults
 
+tightvncserver
 sudo raspi-config
