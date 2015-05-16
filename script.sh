@@ -9,52 +9,36 @@
 SSID="Ocean71"
 PWD="Raspberry71"
 
-# set locales
-export LANGUAGE=fr_FR.UTF-8
-export LANG=fr_FR.UTF-8
-export LC_ALL=fr_FR.UTF-8
+cd ~
+echo "setting locales to fr_FR..."
+if ! grep -q "fr_FR" .profile; then
+	echo "
+	LANGUAGE=fr_FR.UTF-8
+	LANG=fr_FR.UTF-8
+	LC_ALL=fr_FR.UTF-8
+	LC_CTYPE=fr_FR.UTF-8" >> .profile
+fi
+. .profile
 locale-gen fr_FR.UTF-8
 dpkg-reconfigure locales
 
-# add source for TFT and update apt
-#curl -SLs https://apt.adafruit.com/add | sudo bash
-
-# upgrade and install software
+echo "upgrading and installing software..."
 sudo apt-get update
-sudo apt-get autoremove sonic-pi
+sudo apt-get autoremove -y sonic-pi
 sudo apt-get upgrade -y
-sudo apt-get dist-upgrade
+sudo apt-get dist-upgrade -y
 sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver
 
-# get the TFT ready
-#cd
-#wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-bin-adafruit.deb
-#wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-dev-adafruit.deb
-#wget http://adafruit-download.s3.amazonaws.com/libraspberrypi-doc-adafruit.deb
-#wget http://adafruit-download.s3.amazonaws.com/libraspberrypi0-adafruit.deb
-#wget http://adafruit-download.s3.amazonaws.com/raspberrypi-bootloader-adafruit-112613.deb
-#sudo dpkg -i -B *.deb
-#rm *.deb
-#sudo mv /usr/share/X11/xorg.conf.d/99-fbturbo.conf ~
-#sudo echo "
-#spi-bcm2708
-#fbtft_device" >> /etc/modules
-#sudo echo "
-#options fbtft_device name=adafruitts rotate=90 frequency=32000000
-#" >> /etc/modprobe.d/adafruit.conf
-#sudo echo "export FRAMEBUFFER=/dev/fb1" >> .profile
+if ! ls /usr/sbin/hostapd.FCS; then
+	echo "getting the right version of hostapd..."
+	wget http://dl.dropbox.com/u/1663660/hostapd/hostapd
+	sudo chown root:root hostapd
+	sudo chmod 755 hostapd
+	sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.FCS
+	sudo mv hostapd /usr/sbin/hostapd
+fi
 
-# get the TFT ready
-#sudo adafruit-pitft-helper -t 28r
-
-# get the right version of hostapd
-wget http://dl.dropbox.com/u/1663660/hostapd/hostapd
-sudo chown root:root hostapd
-sudo chmod 755 hostapd
-sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.FCS
-sudo mv hostapd /usr/sbin/hostapd
-
-# udhcpd.conf
+echo "generating /etc/udhcpd.conf..."
 sudo echo "
 start 192.168.42.2
 end 192.168.42.20
@@ -65,11 +49,11 @@ opt subnet 255.255.255.0
 opt router 192.168.42.1
 opt lease 864000" > /etc/udhcpd.conf
 
-# udhcpd
+echo "generating /etc/default/udhcpd..."
 sudo echo '
 DHCPD_OPTS="-S"' > /etc/default/udhcpd
 
-# configuring interfaces
+echo "configuring interfaces..."
 sudo ifconfig wlan0 192.168.42.1
 sudo echo "
 auto lo
@@ -82,11 +66,13 @@ iface wlan0 inet static
 auto wlan1
   iface wlan1 inet dhcp" > /etc/network/interfaces
 
-# make it responsible for its network
-sudo echo "
-authoritative" >> /etc/dhcp/dhcpd.conf
+if ! grep -q "\nauthoritative"; then
+	echo "make it responsible for its network..."
+	sudo echo "
+	authoritative" >> /etc/dhcp/dhcpd.conf
+fi
 
-# hostapd.conf
+echo "generating /etc/hostapd/hostapd.conf..."
 sudo echo "
 interface=wlan0
 driver=rtl871xdrv
@@ -102,19 +88,18 @@ wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
 rsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf
 
-# hostapd
+echo "generating /etc/default/hostapd..."
 sudo echo '
 DAEMON_CONF="/etc/hostapd/hostapd.conf"' > /etc/default/hostapd
 
-# starting services
+echo "starting hostapd and udhcpd..."
 sudo service hostapd start
 sudo service udhcpd start
-
-# enable at startup
+echo "enabling hostapd and udhcpd at startup..."
 sudo update-rc.d hostapd enable
 sudo update-rc.d udhcpd enable
 
-# enable vnc at startup
+echo "configuring and enabling vnc server..."
 sudo echo '
 ### BEGIN INIT INFO
 # Provides: vncboot
