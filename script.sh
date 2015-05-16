@@ -9,6 +9,13 @@
 SSID="Ocean71"
 PWD="Raspberry71"
 
+# set locales
+export LANGUAGE=fr_FR.UTF-8
+export LANG=fr_FR.UTF-8
+export LC_ALL=fr_FR.UTF-8
+locale-gen fr_FR.UTF-8
+dpkg-reconfigure locales
+
 # add source for TFT and update apt
 #curl -SLs https://apt.adafruit.com/add | sudo bash
 
@@ -16,6 +23,7 @@ PWD="Raspberry71"
 sudo apt-get update
 sudo apt-get autoremove sonic-pi
 sudo apt-get upgrade -y
+sudo apt-get dist-upgrade
 sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver
 
 # get the TFT ready
@@ -147,6 +155,6 @@ esac
 exit 0' > /etc/init.d/vncboot
 sudo chmod 755 /etc/init.d/vncboot
 sudo update-rc.d vncboot defaults
-
 tightvncserver
+
 sudo raspi-config
