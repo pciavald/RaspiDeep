@@ -13,13 +13,13 @@ cd ~
 echo "setting locales to fr_FR..."
 if ! grep -q "fr_FR" .profile; then
 	echo "
-	LANGUAGE=fr_FR.UTF-8
-	LANG=fr_FR.UTF-8
-	LC_ALL=fr_FR.UTF-8
-	LC_CTYPE=fr_FR.UTF-8" >> .profile
+	export LANGUAGE=fr_FR.UTF-8
+	export LANG=fr_FR.UTF-8
+	export LC_ALL=fr_FR.UTF-8
+	export LC_CTYPE=fr_FR.UTF-8" >> .profile
 fi
-. .profile
 locale-gen fr_FR.UTF-8
+. .profile
 dpkg-reconfigure locales
 
 echo "upgrading and installing software..."
