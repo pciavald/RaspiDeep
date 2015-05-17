@@ -10,17 +10,19 @@
 SSID="Ocean71"
 PWD="Raspberry71"
 
-cd ~
+cd /home/pi
+git clone https://github.com/pciavald/RaspiDeep.git
+
 echo "setting locales to fr_FR..."
-if ! grep -q "fr_FR" .profile; then
+if ! grep -q "fr_FR" /home/pi/.profile; then
 	echo "
 	export LANGUAGE=fr_FR.UTF-8
 	export LANG=fr_FR.UTF-8
 	export LC_ALL=fr_FR.UTF-8
-	export LC_CTYPE=fr_FR.UTF-8" >> .profile
+	export LC_CTYPE=fr_FR.UTF-8" >> /home/pi/.profile
 fi
 locale-gen fr_FR.UTF-8
-. .profile
+. /home/pi/.profile
 dpkg-reconfigure locales
 
 echo "upgrading and installing software..."
@@ -38,9 +40,7 @@ sudo apt-get install uv4l uv4l-raspicam uv4l-uvc uv4l-mjpegstream uv4l-raspicam-
 
 echo "installing mjpg-streamer..."
 sudo apt-get install libjpeg8-dev imagemagick subversion
-cd
-mkdir mjpg-streamer
-cd mjpg-streamer
+mkdir mjpg-streamer && cd mjpg-streamer
 svn co https://svn.code.sf.net/p/mjpg-streamer/code/mjpg-streamer/ .
 CFLAGS+="-Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s" make
 sudo make install
@@ -53,6 +53,14 @@ if ! ls /usr/sbin/hostapd.FCS; then
 	sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.FCS
 	sudo mv hostapd /usr/sbin/hostapd
 fi
+
+echo "generating startup script..."
+sudo echo "
+#!/bin/sh
+echo "starting disposal..."
+/home/pi/RaspiDeep/init.sh
+" > /etc/init.d/setup.sh
+sudo chmod +x /etc/init.d/setup.sh
 
 echo "generating /etc/udhcpd.conf..."
 sudo echo "

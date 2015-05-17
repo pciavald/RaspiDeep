@@ -12,6 +12,6 @@
 
 #!/bin/sh
 
-echo 0 | sudo tee /sys/class/leds/led1/brightness > /dev/null
-echo 1 | sudo tee /sys/class/leds/led0/brightness > /dev/null
-./active_mode.sh
+sudo echo 0 | sudo tee /sys/class/leds/led1/brightness > /dev/null
+sudo echo 1 | sudo tee /sys/class/leds/led0/brightness > /dev/null
+sudo ./sensor
