@@ -16,4 +16,6 @@ echo 1 | sudo tee /sys/class/leds/led0/brightness > /dev/null
 sudo ifconfig wlan0 up
 sudo service hostapd start
 sudo service udhcpd start
-raspivid -t 0 -o - | nc 192.168.42.2 4242 &
+LD_PRELOAD=/usr/lib/uv4l/uv4lext/armv6l/libuv4lext.so mjpg_streamer \
+  -i "/usr/local/lib/input_uvc.so -d /dev/video0 -r 320x240 -f 15" \
+  -o "/usr/local/lib/output_http.so -w /usr/local/www -p 5001" &
