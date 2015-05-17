@@ -16,4 +16,4 @@ echo 1 | sudo tee /sys/class/leds/led0/brightness > /dev/null
 sudo ifconfig wlan0 up
 sudo service hostapd start
 sudo service udhcpd start
-raspivid -t 0 -o - | nc -l 4242 &
+raspivid -t 0 -o - | nc 192.168.42.2 4242 &
