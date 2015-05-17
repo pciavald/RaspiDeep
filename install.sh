@@ -3,6 +3,7 @@
 #http://wiki.rg.net/wiki/RaspberryAP
 #http://elinux.org/RPI-Wireless-Hotspot
 #http://blog.sip2serve.com/post/38010690418/raspberry-pi-access-point-using-rtl8192cu
+#http://stephane.lavirotte.com/perso/rov/video_streaming.html
 # CA4D513F32A613CDFCA7F55551A22A
 
 # settings for WiFi access point
@@ -28,6 +29,21 @@ sudo apt-get autoremove -y sonic-pi
 sudo apt-get upgrade -y
 sudo apt-get dist-upgrade -y
 sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver
+
+echo "installing UV4L..."
+wget -qO- http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc | sudo apt-key add -
+sudo sh -c 'echo "deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ wheezy main" >> /etc/apt/sources.list'
+sudo apt-get update
+sudo apt-get install uv4l uv4l-raspicam uv4l-uvc uv4l-mjpegstream uv4l-raspicam-extras
+
+echo "installing mjpg-streamer..."
+sudo apt-get install libjpeg8-dev imagemagick subversion
+cd
+mkdir mjpg-streamer
+cd mjpg-streamer
+svn co https://svn.code.sf.net/p/mjpg-streamer/code/mjpg-streamer/ .
+CFLAGS+="-Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s" make
+sudo make install
 
 if ! ls /usr/sbin/hostapd.FCS; then
 	echo "getting the right version of hostapd..."
