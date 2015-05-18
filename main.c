@@ -19,9 +19,9 @@ int		ctrl_system(int state)
 	int		result;
 
 	if (state == 1)
-		result = system("./active_mode.sh");
+		result = system("/home/pi/RaspiDeep/active_mode.sh");
 	else
-		result = system("./passive_mode.sh");
+		result = system("/home/pi/RaspiDeep/passive_mode.sh");
 	if (WIFSIGNALED(result))
 	{
 		printf("Exited with signal %d\n", WTERMSIG(result));

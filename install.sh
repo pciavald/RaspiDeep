@@ -78,6 +78,7 @@ sudo echo '
 DHCPD_OPTS="-S"' > /etc/default/udhcpd
 
 echo "configuring interfaces..."
+sudo ifconfig wlan0 up
 sudo ifconfig wlan0 192.168.42.1
 sudo echo "
 auto lo
@@ -90,7 +91,7 @@ iface wlan0 inet static
 auto wlan1
   iface wlan1 inet dhcp" > /etc/network/interfaces
 
-if ! grep -q "\nauthoritative"; then
+if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf; then
 	echo "make it responsible for its network..."
 	sudo echo "
 	authoritative" >> /etc/dhcp/dhcpd.conf
