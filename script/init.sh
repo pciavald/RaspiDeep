@@ -16,5 +16,5 @@ echo none >/sys/class/leds/led0/trigger
 echo 0 | sudo tee /sys/class/leds/led0/brightness > /dev/null
 echo none >/sys/class/leds/led1/trigger
 echo 0 | sudo tee /sys/class/leds/led1/brightness > /dev/null
-/home/pi/RaspiDeep/passive_mode.sh
+/home/pi/RaspiDeep/script/passive_mode.sh
 /home/pi/RaspiDeep/sensor

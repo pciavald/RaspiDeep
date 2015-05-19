@@ -1,1 +1,1 @@
-gcc *.c -o sensor
+gcc src/*.c -o sensor

@@ -12,10 +12,12 @@
 
 #!/bin/sh
 
-echo 1 | sudo tee /sys/class/leds/led0/brightness > /dev/null
+echo 0 | sudo tee /sys/class/leds/led0/brightness > /dev/null
+echo 0 | sudo tee /sys/class/leds/led1/brightness > /dev/null
+sudo pkill raspistill
+sudo pkill raspivid
 sudo ifconfig wlan0 up
 sudo service hostapd start
 sudo service udhcpd start
-LD_PRELOAD=/usr/lib/uv4l/uv4lext/armv6l/libuv4lext.so mjpg_streamer \
-  -i "/usr/local/lib/input_uvc.so -d /dev/video0 -r 320x240 -f 15" \
-  -o "/usr/local/lib/output_http.so -w /usr/local/www -p 5001" &
+sudo service camstream start
+echo 1 | sudo tee /sys/class/leds/led0/brightness > /dev/null
