@@ -11,7 +11,7 @@ SSID="Ocean71"
 PWD="Raspberry71"
 
 #TZ="Europe/Paris"
-#LANG="fr_FR"
+LOCALE="fr_FR"
 
 #"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 
@@ -20,9 +20,9 @@ sudo raspi-config
 ./make.sh
 cd /home/pi
 
-sed -i "s/^# fr_FR/fr_FR/" /etc/locale.gen
-locale-gen
-update-locale LANG=fr_FR.UTF-8
+sudo sed -i "s/^# $LOCALE/$LOCALE/" /etc/locale.gen
+sudo locale-gen
+sudo update-locale LANG=$LOCALE.UTF-8
 
 #echo "setting locales to $LANG.UTF-8..."
 #if ! grep -q "$LANG" /home/pi/.profile; then
@@ -56,12 +56,14 @@ sudo apt-get install -y uv4l-raspicam uv4l-uvc uv4l-mjpegstream uv4l-raspicam-ex
 
 echo "installing mjpg-streamer..."
 sudo apt-get install -y libjpeg8-dev imagemagick subversion
-mkdir mjpg-streamer && cd mjpg-streamer
-svn co https://svn.code.sf.net/p/mjpg-streamer/code/mjpg-streamer/ .
-CFLAGS+="-Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s" make
-sudo make install
+if ! ls /home/pi/mjpg-streamer; then
+	mkdir /home/pi/mjpg-streamer && cd /home/pi/mjpg-streamer
+	svn co https://svn.code.sf.net/p/mjpg-streamer/code/mjpg-streamer/ .
+	sudo make
+	sudo make install
+fi
 
-if ! ls /usr/sbin/hostapd.FCS; then
+if ! sudo ls /usr/sbin/hostapd.FCS; then
 	echo "getting the right version of hostapd..."
 	wget http://dl.dropbox.com/u/1663660/hostapd/hostapd
 	sudo chown root:root hostapd
@@ -75,7 +77,7 @@ echo "
 #!/bin/sh
 echo 'starting beacon...'
 /home/pi/RaspiDeep/beacon/init.sh
-" > /etc/init.d/setup.sh
+" | sudo tee /etc/init.d/setup.sh
 sudo chmod +x /etc/init.d/setup.sh
 
 echo "generating /etc/udhcpd.conf..."
@@ -87,10 +89,10 @@ remaining yes
 opt dns 8.8.8.8 4.2.2.2
 opt subnet 255.255.255.0
 opt router 192.168.42.1
-opt lease 864000" > /etc/udhcpd.conf
+opt lease 864000" | sudo tee /etc/udhcpd.conf
 
 echo "generating /etc/default/udhcpd..."
-echo 'DHCPD_OPTS="-S"' > /etc/default/udhcpd
+echo 'DHCPD_OPTS="-S"' | sudo tee /etc/default/udhcpd
 
 echo "configuring interfaces..."
 sudo ifconfig wlan0 up
@@ -104,11 +106,11 @@ iface wlan0 inet static
 address 192.168.42.1
 netmask 255.255.255.0
 auto wlan1
-iface wlan1 inet dhcp" > /etc/network/interfaces
+iface wlan1 inet dhcp" | sudo tee /etc/network/interfaces
 
 if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf; then
 	echo "make it responsible for its network..."
-	echo "authoritative" >> /etc/dhcp/dhcpd.conf
+	echo "authoritative" | sudo tee --append /etc/dhcp/dhcpd.conf
 fi
 
 echo "generating /etc/hostapd/hostapd.conf..."
@@ -125,10 +127,10 @@ wpa=2
 wpa_passphrase=$PWD
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
-rsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf
+rsn_pairwise=CCMP" | sudo tee /etc/hostapd/hostapd.conf
 
 echo "generating /etc/default/hostapd..."
-echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' > /etc/default/hostapd
+echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee /etc/default/hostapd
 
 echo "starting hostapd and udhcpd..."
 sudo service hostapd start
@@ -149,7 +151,7 @@ echo '
 # Description: Start VNC Server at boot time.
 ### END INIT INFO
 
-#! /bin/sh
+#!/bin/sh
 # /etc/init.d/vncboot
 
 USER=pi
@@ -175,7 +177,8 @@ case "$1" in
 		;;
 esac
 
-exit 0' > /etc/init.d/vncboot
+exit 0' | sudo tee /etc/init.d/vncboot
 sudo chmod 755 /etc/init.d/vncboot
 sudo update-rc.d vncboot defaults
+
 echo "$PWD\n$PWD\n\n" | vncpasswd
