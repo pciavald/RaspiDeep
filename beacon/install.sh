@@ -20,9 +20,9 @@ sudo raspi-config
 ./make.sh
 cd /home/pi
 
-sed -i "s/^# en_US/en_US/" /etc/locale.gen
+sed -i "s/^# fr_FR/fr_FR/" /etc/locale.gen
 locale-gen
-update-locale LANG=en_US.UTF-8
+update-locale LANG=fr_FR.UTF-8
 
 #echo "setting locales to $LANG.UTF-8..."
 #if ! grep -q "$LANG" /home/pi/.profile; then
