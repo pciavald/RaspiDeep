@@ -10,24 +10,28 @@
 SSID="Ocean71"
 PWD="Raspberry71"
 
+TZ="Europe/Paris"
+LANG="fr_FR"
+
+#"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
+
 sudo raspi-config
 
 ./make.sh
 cd /home/pi
 
-echo "setting locales to fr_FR..."
-if ! grep -q "fr_FR" /home/pi/.profile; then
+echo "setting locales to $LANG.UTF-8..."
+if ! grep -q "$LANG" /home/pi/.profile; then
 	echo "
-	export LANGUAGE=fr_FR.UTF-8
-	export LANG=fr_FR.UTF-8
-	export LC_ALL=fr_FR.UTF-8
-	export LC_CTYPE=fr_FR.UTF-8" >> /home/pi/.profile
+	export LANGUAGE=$LANG.UTF-8
+	export LANG=$LANG.UTF-8
+	export LC_ALL=$LANG.UTF-8
+	export LC_CTYPE=$LANG.UTF-8" >> /home/pi/.profile
 fi
-echo "Europe/Paris" > /etc/timezone
+echo "$TZ" > /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
-locale-gen fr_FR.UTF-8
+#locale-gen fr_FR.UTF-8
 . /home/pi/.profile
-dpkg-reconfigure locales
 
 echo "upgrading and installing software..."
 sudo apt-get update
