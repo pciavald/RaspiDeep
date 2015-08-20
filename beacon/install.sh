@@ -46,13 +46,16 @@ sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver
 
 echo "installing UV4L..."
 wget -qO- http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc | sudo apt-key add -
-sudo sh -c 'echo "deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ wheezy main" >> /etc/apt/sources.list'
+if ! grep -q "uv4l" /etc/apt/sources.list; then
+	echo "adding deb source for uv4l..."
+	echo "deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ wheezy main" >> /etc/apt/sources.list
+fi
 sudo apt-get update
-sudo apt-get install uv4l
-sudo apt-get install uv4l-raspicam uv4l-uvc uv4l-mjpegstream uv4l-raspicam-extras
+sudo apt-get install -y uv4l
+sudo apt-get install -y uv4l-raspicam uv4l-uvc uv4l-mjpegstream uv4l-raspicam-extras
 
 echo "installing mjpg-streamer..."
-sudo apt-get install libjpeg8-dev imagemagick subversion
+sudo apt-get install -y libjpeg8-dev imagemagick subversion
 mkdir mjpg-streamer && cd mjpg-streamer
 svn co https://svn.code.sf.net/p/mjpg-streamer/code/mjpg-streamer/ .
 CFLAGS+="-Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s" make
@@ -87,8 +90,7 @@ opt router 192.168.42.1
 opt lease 864000" > /etc/udhcpd.conf
 
 echo "generating /etc/default/udhcpd..."
-echo '
-DHCPD_OPTS="-S"' > /etc/default/udhcpd
+echo 'DHCPD_OPTS="-S"' > /etc/default/udhcpd
 
 echo "configuring interfaces..."
 sudo ifconfig wlan0 up
