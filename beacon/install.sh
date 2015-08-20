@@ -10,8 +10,8 @@
 SSID="Ocean71"
 PWD="Raspberry71"
 
+./make
 cd /home/pi
-git clone https://github.com/pciavald/RaspiDeep.git
 
 echo "setting locales to fr_FR..."
 if ! grep -q "fr_FR" /home/pi/.profile; then
