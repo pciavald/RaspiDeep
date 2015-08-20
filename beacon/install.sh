@@ -28,7 +28,6 @@ dpkg-reconfigure locales
 echo "upgrading and installing software..."
 sudo apt-get update
 sudo apt-get autoremove -y sonic-pi
-sudo apt-get upgrade -y
 sudo apt-get dist-upgrade -y
 sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver
 
@@ -55,11 +54,11 @@ if ! ls /usr/sbin/hostapd.FCS; then
 fi
 
 echo "generating startup script..."
-sudo echo "
+sudo `echo "
 #!/bin/sh
-echo "starting disposal..."
-/home/pi/RaspiDeep/init.sh
-" > /etc/init.d/setup.sh
+echo 'starting beacon...'
+/home/pi/RaspiDeep/beacon/init.sh
+" > /etc/init.d/setup.sh`
 sudo chmod +x /etc/init.d/setup.sh
 
 echo "generating /etc/udhcpd.conf..."
@@ -74,13 +73,13 @@ opt router 192.168.42.1
 opt lease 864000" > /etc/udhcpd.conf
 
 echo "generating /etc/default/udhcpd..."
-sudo echo '
-DHCPD_OPTS="-S"' > /etc/default/udhcpd
+sudo `echo '
+DHCPD_OPTS="-S"' > /etc/default/udhcpd`
 
 echo "configuring interfaces..."
 sudo ifconfig wlan0 up
 sudo ifconfig wlan0 192.168.42.1
-sudo echo "
+sudo `echo "
 auto lo
   iface lo inet loopback
 auto eth0
@@ -89,7 +88,7 @@ iface wlan0 inet static
   address 192.168.42.1
   netmask 255.255.255.0
 auto wlan1
-  iface wlan1 inet dhcp" > /etc/network/interfaces
+  iface wlan1 inet dhcp" > /etc/network/interfaces`
 
 if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf; then
 	echo "make it responsible for its network..."
@@ -98,7 +97,7 @@ if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf; then
 fi
 
 echo "generating /etc/hostapd/hostapd.conf..."
-sudo echo "
+sudo `echo "
 interface=wlan0
 driver=rtl871xdrv
 ssid=$SSID
@@ -111,11 +110,11 @@ wpa=2
 wpa_passphrase=$PWD
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
-rsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf
+rsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf`
 
 echo "generating /etc/default/hostapd..."
-sudo echo '
-DAEMON_CONF="/etc/hostapd/hostapd.conf"' > /etc/default/hostapd
+sudo `echo '
+DAEMON_CONF="/etc/hostapd/hostapd.conf"' > /etc/default/hostapd`
 
 echo "starting hostapd and udhcpd..."
 sudo service hostapd start
@@ -125,7 +124,7 @@ sudo update-rc.d hostapd enable
 sudo update-rc.d udhcpd enable
 
 echo "configuring and enabling vnc server..."
-sudo echo '
+sudo `echo '
 ### BEGIN INIT INFO
 # Provides: vncboot
 # Required-Start: $remote_fs $syslog
@@ -162,7 +161,7 @@ case "$1" in
   ;;
 esac
 
-exit 0' > /etc/init.d/vncboot
+exit 0' > /etc/init.d/vncboot`
 sudo chmod 755 /etc/init.d/vncboot
 sudo update-rc.d vncboot defaults
 tightvncserver

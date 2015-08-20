@@ -6,12 +6,13 @@
 #    By: pciavald <pciavald@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/05/17 05:57:41 by pciavald          #+#    #+#              #
-#    Updated: 2015/05/17 07:39:15 by pciavald         ###   ########.fr        #
+#    Updated: 2015/08/20 13:52:12 by pciavald         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #!/bin/sh
 
+# wifi credentials
 SSID=Ocean71
 PWD=Raspberry71
 
@@ -29,27 +30,27 @@ dpkg-reconfigure locales
 
 sudo rpi-update
 sudo apt-get update
+sudo apt-get dist-upgrade -y
 sudo apt-get install mplayer vim tightvncserver
 
-sudo echo '
+sudo `echo '
 Section "Device"
   Identifier "Adafruit PiTFT"
   Driver "fbdev"
   Option "fbdev" "/dev/fb1"
-EndSection' > /usr/share/X11/xorg.conf.d/99-pitft.conf
-
-sudo echo "
+EndSection' > /usr/share/X11/xorg.conf.d/99-pitft.conf`
+sudo `echo "
 BLANK_TIME=0
 BLANK_DPMS=off
-POWERDOWN_TIME=0" > /etc/kbd/config
+POWERDOWN_TIME=0" > /etc/kbd/config`
 
-sudo echo "
+sudo `echo "
 auto lo
   iface lo inet loopback
 auto eth0
   iface eth0 inet dhcp
 iface wlan0 inet static
-  address 192.168.42.2" > /etc/network/interfaces
+  address 192.168.42.2" > /etc/network/interfaces`
 echo $SSID | wpa_passphrase $PWD | sudo tee /etc/wpa_supplicant.conf
 
 sudo raspi-config
