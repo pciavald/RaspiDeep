@@ -12,7 +12,7 @@ PWD="Raspberry71"
 
 sudo raspi-config
 
-./make
+./make.sh
 cd /home/pi
 
 echo "setting locales to fr_FR..."
