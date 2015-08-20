@@ -20,18 +20,22 @@ sudo raspi-config
 ./make.sh
 cd /home/pi
 
-echo "setting locales to $LANG.UTF-8..."
-if ! grep -q "$LANG" /home/pi/.profile; then
-	echo "
-	export LANGUAGE=$LANG.UTF-8
-	export LANG=$LANG.UTF-8
-	export LC_ALL=$LANG.UTF-8
-	export LC_CTYPE=$LANG.UTF-8" >> /home/pi/.profile
-fi
-locale-gen $LANG.UTF-8
-echo "$TZ" > /etc/timezone
-dpkg-reconfigure -f noninteractive tzdata 2> /dev/null
-. /home/pi/.profile
+sed -i "s/^# en_US/en_US/" /etc/locale.gen
+locale-gen
+update-locale LANG=en_US.UTF-8
+
+#echo "setting locales to $LANG.UTF-8..."
+#if ! grep -q "$LANG" /home/pi/.profile; then
+#	echo "
+#	export LANGUAGE=$LANG.UTF-8
+#	export LANG=$LANG.UTF-8
+#	export LC_ALL=$LANG.UTF-8
+#	export LC_CTYPE=$LANG.UTF-8" >> /home/pi/.profile
+#fi
+#locale-gen $LANG.UTF-8
+#echo "$TZ" > /etc/timezone
+#dpkg-reconfigure -f noninteractive tzdata 2> /dev/null
+#. /home/pi/.profile
 
 echo "upgrading and installing software..."
 sudo apt-get update
@@ -90,14 +94,14 @@ sudo ifconfig wlan0 up
 sudo ifconfig wlan0 192.168.42.1
 echo "
 auto lo
-  iface lo inet loopback
+iface lo inet loopback
 auto eth0
-  iface eth0 inet dhcp
+iface eth0 inet dhcp
 iface wlan0 inet static
-  address 192.168.42.1
-  netmask 255.255.255.0
+address 192.168.42.1
+netmask 255.255.255.0
 auto wlan1
-  iface wlan1 inet dhcp" > /etc/network/interfaces
+iface wlan1 inet dhcp" > /etc/network/interfaces
 
 if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf; then
 	echo "make it responsible for its network..."
@@ -151,21 +155,21 @@ HOME=/home/pi
 export USER HOME
 
 case "$1" in
- start)
-  echo "Starting VNC Server"
-  #Insert your favoured settings for a VNC session
-  su - pi -c "/usr/bin/vncserver :0 -geometry 1280x800 -depth 16 -pixelformat rgb565"
-  ;;
+	start)
+		echo "Starting VNC Server"
+		#Insert your favoured settings for a VNC session
+		su - pi -c "/usr/bin/vncserver :0 -geometry 1280x800 -depth 16 -pixelformat rgb565"
+		;;
 
- stop)
-  echo "Stopping VNC Server"
-  /usr/bin/vncserver -kill :0
-  ;;
+	stop)
+		echo "Stopping VNC Server"
+		/usr/bin/vncserver -kill :0
+		;;
 
- *)
-  echo "Usage: /etc/init.d/vncboot {start|stop}"
-  exit 1
-  ;;
+	*)
+		echo "Usage: /etc/init.d/vncboot {start|stop}"
+		exit 1
+		;;
 esac
 
 exit 0' > /etc/init.d/vncboot
