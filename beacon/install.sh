@@ -23,6 +23,8 @@ if ! grep -q "fr_FR" /home/pi/.profile; then
 	export LC_ALL=fr_FR.UTF-8
 	export LC_CTYPE=fr_FR.UTF-8" >> /home/pi/.profile
 fi
+echo "Europe/Paris" > /etc/timezone
+dpkg-reconfigure -f noninteractive tzdata
 locale-gen fr_FR.UTF-8
 . /home/pi/.profile
 dpkg-reconfigure locales
