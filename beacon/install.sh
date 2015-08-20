@@ -28,9 +28,9 @@ if ! grep -q "$LANG" /home/pi/.profile; then
 	export LC_ALL=$LANG.UTF-8
 	export LC_CTYPE=$LANG.UTF-8" >> /home/pi/.profile
 fi
+locale-gen $LANG.UTF-8
 echo "$TZ" > /etc/timezone
-dpkg-reconfigure -f noninteractive tzdata
-#locale-gen fr_FR.UTF-8
+dpkg-reconfigure -f noninteractive tzdata 2> /dev/null
 . /home/pi/.profile
 
 echo "upgrading and installing software..."
