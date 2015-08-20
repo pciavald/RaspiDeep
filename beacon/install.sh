@@ -10,8 +10,8 @@
 SSID="Ocean71"
 PWD="Raspberry71"
 
-TZ="Europe/Paris"
-LANG="fr_FR"
+#TZ="Europe/Paris"
+#LANG="fr_FR"
 
 #"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 
@@ -38,6 +38,7 @@ update-locale LANG=en_US.UTF-8
 #. /home/pi/.profile
 
 echo "upgrading and installing software..."
+sudo rpi-update
 sudo apt-get update
 sudo apt-get autoremove -y sonic-pi
 sudo apt-get dist-upgrade -y
