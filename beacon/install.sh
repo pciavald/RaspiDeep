@@ -84,7 +84,7 @@ echo "
 ### END INIT INFO
 #!/bin/sh
 echo 'starting beacon...'
-$DIR/init.sh
+$DIR/script/init.sh
 " | sudo tee /etc/init.d/setup.sh > /dev/null
 sudo chmod 755 /etc/init.d/setup.sh
 
