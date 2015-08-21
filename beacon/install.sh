@@ -148,7 +148,7 @@ sudo update-rc.d hostapd enable
 sudo update-rc.d udhcpd enable
 
 echo "configuring and enabling vnc server..."
-sudo cp $DIR/confs/vncboot.sh /etc/init.d/vncboot.sh
+sudo cp $DIR/conf/vncboot.sh /etc/init.d/vncboot.sh
 sudo chmod 755 /etc/init.d/vncboot.sh
 sudo update-rc.d vncboot.sh defaults
 expect << EOF
