@@ -74,6 +74,15 @@ fi
 
 echo "generating startup script..."
 echo "
+### BEGIN INIT INFO
+# Provides:          beacon
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: beacon
+# Description:       starting the beacon runtime
+### END INIT INFO
 #!/bin/sh
 echo 'starting beacon...'
 /home/pi/RaspiDeep/beacon/init.sh
