@@ -28,11 +28,11 @@ if ! grep -q "$LOCALE" /home/pi/.profile; then
 	export LANG=$LOCALE.UTF-8
 	export LC_ALL=$LOCALE.UTF-8
 	export LC_CTYPE=$LOCALE.UTF-8" >> /home/pi/.profile
+	. /home/pi/.profile
+	sudo sed -i "s/^# $LOCALE.UTF-8/$LOCALE.UTF-8/" /etc/locale.gen
+	sudo locale-gen
+	sudo update-locale LANG=$LOCALE.UTF-8
 fi
-. /home/pi/.profile
-sudo sed -i "s/^# $LOCALE.UTF-8/$LOCALE.UTF-8/" /etc/locale.gen
-sudo locale-gen
-sudo update-locale LANG=$LOCALE.UTF-8
 
 echo "upgrading and installing software..."
 sudo apt-get update
@@ -83,8 +83,8 @@ echo "
 #!/bin/sh
 echo 'starting beacon...'
 /home/pi/RaspiDeep/beacon/init.sh
-" | sudo tee /etc/init.d/setup.sh
-sudo chmod +x /etc/init.d/setup.sh
+" | sudo tee /etc/init.d/setup.sh > /dev/null
+sudo chmod 755 /etc/init.d/setup.sh
 
 echo "generating /etc/udhcpd.conf..."
 echo "
@@ -95,10 +95,10 @@ remaining yes
 opt dns 8.8.8.8 4.2.2.2
 opt subnet 255.255.255.0
 opt router 192.168.42.1
-opt lease 864000" | sudo tee /etc/udhcpd.conf
+opt lease 864000" | sudo tee /etc/udhcpd.conf > /dev/null
 
 echo "generating /etc/default/udhcpd..."
-echo 'DHCPD_OPTS="-S"' | sudo tee /etc/default/udhcpd
+echo 'DHCPD_OPTS="-S"' | sudo tee /etc/default/udhcpd > /dev/null
 
 echo "configuring interfaces..."
 sudo ifconfig wlan0 up
@@ -112,10 +112,10 @@ iface wlan0 inet static
 address 192.168.42.1
 netmask 255.255.255.0
 auto wlan1
-iface wlan1 inet dhcp" | sudo tee /etc/network/interfaces
+iface wlan1 inet dhcp" | sudo tee /etc/network/interfaces > /dev/null
 
+echo "make it responsible for its network..."
 if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf; then
-	echo "make it responsible for its network..."
 	echo "authoritative" | sudo tee --append /etc/dhcp/dhcpd.conf
 fi
 
@@ -133,10 +133,10 @@ wpa=2
 wpa_passphrase=$PWD
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
-rsn_pairwise=CCMP" | sudo tee /etc/hostapd/hostapd.conf
+rsn_pairwise=CCMP" | sudo tee /etc/hostapd/hostapd.conf > /dev/null
 
 echo "generating /etc/default/hostapd..."
-echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee /etc/default/hostapd
+echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' | sudo tee /etc/default/hostapd > /dev/null
 
 echo "starting hostapd and udhcpd..."
 sudo service hostapd start
@@ -146,46 +146,9 @@ sudo update-rc.d hostapd enable
 sudo update-rc.d udhcpd enable
 
 echo "configuring and enabling vnc server..."
-echo '
-### BEGIN INIT INFO
-# Provides: vncboot
-# Required-Start: $remote_fs $syslog
-# Required-Stop: $remote_fs $syslog
-# Default-Start: 2 3 4 5
-# Default-Stop: 0 1 6
-# Short-Description: Start VNC Server at boot time
-# Description: Start VNC Server at boot time.
-### END INIT INFO
-
-#!/bin/sh
-# /etc/init.d/vncboot
-
-USER=pi
-HOME=/home/pi
-
-export USER HOME
-
-case "$1" in
-	start)
-		echo "Starting VNC Server"
-		#Insert your favoured settings for a VNC session
-		su - pi -c "/usr/bin/vncserver :0 -geometry 1280x800 -depth 16 -pixelformat rgb565"
-		;;
-
-	stop)
-		echo "Stopping VNC Server"
-		/usr/bin/vncserver -kill :0
-		;;
-
-	*)
-		echo "Usage: /etc/init.d/vncboot {start|stop}"
-		exit 1
-		;;
-esac
-
-exit 0' | sudo tee /etc/init.d/vncboot
-sudo chmod 755 /etc/init.d/vncboot
-sudo update-rc.d vncboot defaults
+sudo cp confs/vncboot.sh /etc/init.d/vncboot.sh
+sudo chmod 755 /etc/init.d/vncboot.sh
+sudo update-rc.d vncboot.sh defaults
 expect << EOF
 spawn "/usr/bin/vncpasswd"
 expect "Password:"
@@ -195,3 +158,4 @@ send "$PWD\r"
 expect eof
 exit
 EOF
+sudo service vncboot.sh start
