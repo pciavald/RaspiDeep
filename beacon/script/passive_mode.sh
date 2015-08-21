@@ -6,7 +6,7 @@
 #    By: pciavald <pciavald@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/05/16 16:06:20 by pciavald          #+#    #+#              #
-#    Updated: 2015/08/20 19:53:18 by pciavald         ###   ########.fr        #
+#    Updated: 2015/08/21 06:20:39 by pciavald         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ sudo service udhcpd stop
 sudo ifconfig wlan0 down
 echo 0 | sudo tee /sys/class/leds/led0/brightness > /dev/null
 echo 1 | sudo tee /sys/class/leds/led1/brightness > /dev/null
-if ls /home/pi/RaspiDeep/beacon/record.sh; then
+if ls $RASPIDEEP/record.sh; then
     sleep 1
     echo 0 | sudo tee /sys/class/leds/led1/brightness > /dev/null
     sleep 1
@@ -30,5 +30,5 @@ if ls /home/pi/RaspiDeep/beacon/record.sh; then
     do
         n=$((n+1))
     done;
-    sudo /home/pi/RaspiDeep/beacon/record.sh $n &
+    sudo $RASPIDEEP/record.sh $n &
 fi
