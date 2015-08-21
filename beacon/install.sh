@@ -21,16 +21,16 @@ sudo raspi-config
 ./make.sh
 cd /home/pi
 
-echo "setting locales to $LANG.UTF-8..."
-if ! grep -q "$LANG" /home/pi/.profile; then
+echo "setting locales to $LOCALE.UTF-8..."
+if ! grep -q "$LOCALE" /home/pi/.profile; then
 	echo "
-	export LANGUAGE=$LANG.UTF-8
-	export LANG=$LANG.UTF-8
-	export LC_ALL=$LANG.UTF-8
-	export LC_CTYPE=$LANG.UTF-8" >> /home/pi/.profile
+	export LANGUAGE=$LOCALE.UTF-8
+	export LANG=$LOCALE.UTF-8
+	export LC_ALL=$LOCALE.UTF-8
+	export LC_CTYPE=$LOCALE.UTF-8" >> /home/pi/.profile
 fi
 . /home/pi/.profile
-sudo sed -i "s/^# $LOCALE/$LOCALE/" /etc/locale.gen
+sudo sed -i "s/^# $LOCALE.UTF-8/$LOCALE.UTF-8/" /etc/locale.gen
 sudo locale-gen
 sudo update-locale LANG=$LOCALE.UTF-8
 
