@@ -14,17 +14,16 @@ LOCALE="fr_FR"
 
 #"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 
-if ! grep -q "READY" /home/pi/.profile; then
-	echo "export READY" >> /home/pi/.profile
+DIR=`pwd`
+if ! grep -q "RASPIDEEP" /home/pi/.profile; then
+	echo "export RASPIDEEP=$DIR" >> /home/pi/.profile
 	sudo raspi-config
 	exit 0
 fi
 
-DIR=`pwd`
 echo "setting locales to $LOCALE.UTF-8..."
 if ! grep -q "$LOCALE" /home/pi/.profile; then
 	echo "
-	export RASPIDEEP=$DIR
 	export LANGUAGE=$LOCALE.UTF-8
 	export LANG=$LOCALE.UTF-8
 	export LC_ALL=$LOCALE.UTF-8
