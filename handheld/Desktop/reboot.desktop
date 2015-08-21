@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Reboot
-Comment="Observer a travers la camera"
+Comment="Reboot"
 Icon=/usr/share/pixmaps/openbox.xpm
 Exec=sh -c "sudo reboot"
 Type=Application

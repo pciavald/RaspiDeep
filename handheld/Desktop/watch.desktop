@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Observer
-Comment="Observer a travers la camera"
+Name=Watch
+Comment="Watch what the camera sees"
 Icon=/usr/share/pixmaps/openbox.xpm
-Exec=sh -c "sudo /home/pi/RaspiDeep/watch.sh"
+Exec=sh -c "sudo $RASPIDEEP/watch.sh"
 Type=Application
 Encoding=UTF-8
 Terminal=false

@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=ERASE
-Comment="Erase content of camera"
+Name=Shutdown
+Comment="Shutdown"
 Icon=/usr/share/pixmaps/openbox.xpm
-Exec=xdg-open "/home/pi/confirm"
+Exec=sh -c "sudo shutdown -h now"
 Type=Application
 Encoding=UTF-8
 Terminal=false
