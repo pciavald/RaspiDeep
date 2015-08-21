@@ -15,42 +15,38 @@ LOCALE="fr_FR"
 
 #"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 
+sudo rpi-update
 sudo raspi-config
 
 ./make.sh
 cd /home/pi
 
+echo "setting locales to $LANG.UTF-8..."
+if ! grep -q "$LANG" /home/pi/.profile; then
+	echo "
+	export LANGUAGE=$LANG.UTF-8
+	export LANG=$LANG.UTF-8
+	export LC_ALL=$LANG.UTF-8
+	export LC_CTYPE=$LANG.UTF-8" >> /home/pi/.profile
+fi
+. /home/pi/.profile
 sudo sed -i "s/^# $LOCALE/$LOCALE/" /etc/locale.gen
 sudo locale-gen
 sudo update-locale LANG=$LOCALE.UTF-8
 
-#echo "setting locales to $LANG.UTF-8..."
-#if ! grep -q "$LANG" /home/pi/.profile; then
-#	echo "
-#	export LANGUAGE=$LANG.UTF-8
-#	export LANG=$LANG.UTF-8
-#	export LC_ALL=$LANG.UTF-8
-#	export LC_CTYPE=$LANG.UTF-8" >> /home/pi/.profile
-#fi
-#locale-gen $LANG.UTF-8
-#echo "$TZ" > /etc/timezone
-#dpkg-reconfigure -f noninteractive tzdata 2> /dev/null
-#. /home/pi/.profile
-
 echo "upgrading and installing software..."
-sudo rpi-update
 sudo apt-get update
 sudo apt-get autoremove -y sonic-pi
 sudo apt-get dist-upgrade -y
 sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver
 
 echo "installing UV4L..."
-wget -qO- http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc | sudo apt-key add -
 if ! grep -q "uv4l" /etc/apt/sources.list; then
 	echo "adding deb source for uv4l..."
+	wget -qO- http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc | sudo apt-key add -
 	echo "deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ wheezy main" >> /etc/apt/sources.list
+	sudo apt-get update
 fi
-sudo apt-get update
 sudo apt-get install -y uv4l
 sudo apt-get install -y uv4l-raspicam uv4l-uvc uv4l-mjpegstream uv4l-raspicam-extras
 
