@@ -45,7 +45,7 @@ if ! grep -q "uv4l" /etc/apt/sources.list; then
 	echo "adding deb source for uv4l..."
 	wget -qO- http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc | sudo apt-key add -
 	echo "deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ wheezy main" \
-		| sudo tee /etc/apt/sources.list
+		| sudo tee --append /etc/apt/sources.list
 	sudo apt-get update
 fi
 sudo apt-get install -y uv4l
@@ -186,5 +186,5 @@ esac
 exit 0' | sudo tee /etc/init.d/vncboot
 sudo chmod 755 /etc/init.d/vncboot
 sudo update-rc.d vncboot defaults
-
+mkdir /home/pi/.vnc
 echo "$PWD\n$PWD\n\n" | vncpasswd
