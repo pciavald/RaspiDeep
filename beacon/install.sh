@@ -160,7 +160,8 @@ expect "Password:"
 send "$PWD\r"
 expect "Verify:"
 send "$PWD\r"
-expect eof
+expect "Would you like to enter a view-only password (y/n)?\r"
+send "n"
 exit
 EOF
 echo -n "\n"
