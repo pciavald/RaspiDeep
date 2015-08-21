@@ -84,7 +84,7 @@ echo "
 ### END INIT INFO
 #!/bin/sh
 echo 'starting beacon...'
-$DIR/beacon/init.sh
+$DIR/init.sh
 " | sudo tee /etc/init.d/setup.sh > /dev/null
 sudo chmod 755 /etc/init.d/setup.sh
 
@@ -148,7 +148,7 @@ sudo update-rc.d hostapd enable
 sudo update-rc.d udhcpd enable
 
 echo "configuring and enabling vnc server..."
-sudo cp $DIR/beacon/confs/vncboot.sh /etc/init.d/vncboot.sh
+sudo cp $DIR/confs/vncboot.sh /etc/init.d/vncboot.sh
 sudo chmod 755 /etc/init.d/vncboot.sh
 sudo update-rc.d vncboot.sh defaults
 expect << EOF
@@ -160,5 +160,5 @@ send "$PWD\r"
 expect eof
 exit
 EOF
-echo "\n"
+echo -n "\n"
 sudo service vncboot.sh start
