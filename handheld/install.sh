@@ -11,7 +11,9 @@ LOCALE="fr_FR"
 DIR=`pwd`
 if ! grep -q "RASPIDEEP" /home/pi/.profile; then
 	echo "export RASPIDEEP=$DIR" >> /home/pi/.profile
+	sudo rpi-update #TODO safe before expanding ?
 	sudo raspi-config
+	sudo reboot
 	exit 0
 fi
 
@@ -28,7 +30,6 @@ if ! grep -q "$LOCALE" /home/pi/.profile; then
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
 
-sudo rpi-update
 sudo apt-get update
 sudo apt-get dist-upgrade -y
 sudo apt-get install mplayer vim tightvncserver

@@ -15,14 +15,14 @@ LOCALE="fr_FR"
 #"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 
 DIR=`pwd`
-if ! grep -q "RASPIDEEP" /home/pi/.profile; then
+if ! grep -q "RASPIDEEP" /home/pi/.profile > /dev/null; then
 	echo "export RASPIDEEP=$DIR" >> /home/pi/.profile
 	sudo raspi-config
 	exit 0
 fi
 
 echo "setting locales to $LOCALE.UTF-8..."
-if ! grep -q "$LOCALE" /home/pi/.profile; then
+if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	echo "
 	export LANGUAGE=$LOCALE.UTF-8
 	export LANG=$LOCALE.UTF-8
@@ -42,10 +42,10 @@ sudo rpi-update
 sudo apt-get update
 sudo apt-get autoremove -y sonic-pi
 sudo apt-get dist-upgrade -y
-sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver htop
+sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver htop expect
 
 echo "installing UV4L..."
-if ! grep -q "uv4l" /etc/apt/sources.list; then
+if ! grep -q "uv4l" /etc/apt/sources.list > /dev/null; then
 	echo "adding deb source for uv4l..."
 	wget -qO- http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc | sudo apt-key add -
 	echo "deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ wheezy main" \
@@ -57,14 +57,14 @@ sudo apt-get install -y uv4l-raspicam uv4l-uvc uv4l-mjpegstream uv4l-raspicam-ex
 
 echo "installing mjpg-streamer..."
 sudo apt-get install -y libjpeg8-dev imagemagick subversion
-if ! ls /home/pi/mjpg-streamer; then
+if ! ls /home/pi/mjpg-streamer > /dev/null; then
 	mkdir /home/pi/mjpg-streamer && cd /home/pi/mjpg-streamer
 	svn co https://svn.code.sf.net/p/mjpg-streamer/code/mjpg-streamer/ .
 	sudo make
 	sudo make install
 fi
 
-if ! sudo ls /usr/sbin/hostapd.FCS; then
+if ! sudo ls /usr/sbin/hostapd.FCS > /dev/null; then
 	echo "getting the right version of hostapd..."
 	wget http://dl.dropbox.com/u/1663660/hostapd/hostapd
 	sudo chown root:root hostapd
@@ -120,7 +120,7 @@ auto wlan1
 iface wlan1 inet dhcp" | sudo tee /etc/network/interfaces > /dev/null
 
 echo "make it responsible for its network..."
-if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf; then
+if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf > /dev/null; then
 	echo "authoritative" | sudo tee --append /etc/dhcp/dhcpd.conf
 fi
 
