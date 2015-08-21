@@ -9,16 +9,16 @@ LOCALE="fr_FR"
 #"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 
 DIR=`pwd`
-if ! grep -q "RASPIDEEP" /home/pi/.profile; then
+if ! grep -q "RASPIDEEP" /home/pi/.profile > /dev/null; then
 	echo "export RASPIDEEP=$DIR" >> /home/pi/.profile
-	sudo rpi-update #TODO safe before expanding ?
+	sudo rpi-update
 	sudo raspi-config
 	sudo reboot
 	exit 0
 fi
 
 echo "setting locales to $LOCALE.UTF-8..."
-if ! grep -q "$LOCALE" /home/pi/.profile; then
+if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	echo "
 	export LANGUAGE=$LOCALE.UTF-8
 	export LANG=$LOCALE.UTF-8
@@ -32,7 +32,7 @@ fi
 
 sudo apt-get update
 sudo apt-get dist-upgrade -y
-sudo apt-get install mplayer vim tightvncserver
+sudo apt-get -y install mplayer vim tightvncserver
 
 echo "setting up PiTFT..."
 echo '
@@ -57,5 +57,5 @@ iface wlan0 inet static
 echo $SSID | wpa_passphrase $PWD | sudo tee /etc/wpa_supplicant.conf > /dev/null
 
 echo "installing desktop shortcuts"
-sudo rm -r /home/pi/Desktop /home/pi/confirm
+sudo rm -r /home/pi/Desktop /home/pi/confirm > /dev/null
 cp -r $DIR/Desktop $DIR/confirm /home/pi
