@@ -6,7 +6,7 @@
 #    By: pciavald <pciavald@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/05/17 05:57:41 by pciavald          #+#    #+#              #
-#    Updated: 2015/08/21 16:09:54 by pciavald         ###   ########.fr        #
+#    Updated: 2015/08/21 16:28:15 by pciavald         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,9 @@ PWD="Raspberry71"
 LOCALE="fr_FR"
 
 #"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
+
+sudo raspi-config
+sudo rpi-update
 
 DIR=`pwd`
 cd /home/pi
@@ -37,8 +40,32 @@ if ! grep -q "$LOCALE" /home/pi/.profile; then
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
 
-sudo rpi-update
-sudo raspi-config
+if ! grep -q "READY" /home/pi/.profile; then
+	echo "preparing installation for reboots..."
+	echo "
+	### BEGIN INIT INFO
+	# Provides:          installer
+	# Required-Start:    $local_fs $network
+	# Required-Stop:     $local_fs
+	# Default-Start:     2 3 4 5
+	# Default-Stop:      0 1 6
+	# Short-Description: installer
+	# Description:       handles installation reboots
+	### END INIT INFO
+	#!/bin/sh
+
+	rm /etc/init.d/install.sh
+	update-rc.d install.sh remove
+	echo 'export READY' > /home/pi/.profile
+	rpi-update
+	reboot
+
+	" | sudo tee /etc/init.d/install.sh > /dev/null
+	sudo chmod 755 /etc/init.d/install.sh
+	sudo update-rc.d install.sh defaults
+	sudo raspi-config
+fi
+
 sudo apt-get update
 sudo apt-get dist-upgrade -y
 sudo apt-get install mplayer vim tightvncserver
