@@ -186,5 +186,12 @@ esac
 exit 0' | sudo tee /etc/init.d/vncboot
 sudo chmod 755 /etc/init.d/vncboot
 sudo update-rc.d vncboot defaults
-mkdir /home/pi/.vnc
-echo "$PWD\n$PWD\n\n" | vncpasswd
+expect << EOF
+spawn "/usr/bin/vncpasswd"
+expect "Password:"
+send "$PWD\r"
+expect "Verify:"
+send "$PWD\r"
+expect eof
+exit
+EOF
