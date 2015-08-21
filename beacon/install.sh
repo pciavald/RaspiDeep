@@ -19,11 +19,13 @@ sudo rpi-update
 sudo raspi-config
 
 ./make.sh
+DIR=`pwd`
 cd /home/pi
 
 echo "setting locales to $LOCALE.UTF-8..."
 if ! grep -q "$LOCALE" /home/pi/.profile; then
 	echo "
+	export RASPIDEEP=$DIR
 	export LANGUAGE=$LOCALE.UTF-8
 	export LANG=$LOCALE.UTF-8
 	export LC_ALL=$LOCALE.UTF-8
@@ -38,7 +40,7 @@ echo "upgrading and installing software..."
 sudo apt-get update
 sudo apt-get autoremove -y sonic-pi
 sudo apt-get dist-upgrade -y
-sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver
+sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver htop
 
 echo "installing UV4L..."
 if ! grep -q "uv4l" /etc/apt/sources.list; then
@@ -82,7 +84,7 @@ echo "
 ### END INIT INFO
 #!/bin/sh
 echo 'starting beacon...'
-/home/pi/RaspiDeep/beacon/init.sh
+$DIR/beacon/init.sh
 " | sudo tee /etc/init.d/setup.sh > /dev/null
 sudo chmod 755 /etc/init.d/setup.sh
 
@@ -146,7 +148,7 @@ sudo update-rc.d hostapd enable
 sudo update-rc.d udhcpd enable
 
 echo "configuring and enabling vnc server..."
-sudo cp confs/vncboot.sh /etc/init.d/vncboot.sh
+sudo cp $DIR/beacon/confs/vncboot.sh /etc/init.d/vncboot.sh
 sudo chmod 755 /etc/init.d/vncboot.sh
 sudo update-rc.d vncboot.sh defaults
 expect << EOF
@@ -158,4 +160,5 @@ send "$PWD\r"
 expect eof
 exit
 EOF
+echo "\n"
 sudo service vncboot.sh start
