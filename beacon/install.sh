@@ -14,6 +14,13 @@ LOCALE="fr_FR"
 
 #"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 
+if ! grep -q "READY" /home/pi/.profile; then
+	echo "export READY" >> /home/pi/.profile
+	sudo raspi-config
+	exit 0
+fi
+
+DIR=`pwd`
 echo "setting locales to $LOCALE.UTF-8..."
 if ! grep -q "$LOCALE" /home/pi/.profile; then
 	echo "
@@ -28,34 +35,7 @@ if ! grep -q "$LOCALE" /home/pi/.profile; then
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
 
-if ! grep -q "READY" /home/pi/.profile; then
-	echo "preparing installation for reboots..."
-	echo "
-	### BEGIN INIT INFO
-	# Provides:          installer
-	# Required-Start:    $local_fs $network
-	# Required-Stop:     $local_fs
-	# Default-Start:     2 3 4 5
-	# Default-Stop:      0 1 6
-	# Short-Description: installer
-	# Description:       handles installation reboots
-	### END INIT INFO
-	#!/bin/sh
-
-	rm /etc/init.d/install.sh
-	update-rc.d install.sh remove
-	echo 'export READY' > /home/pi/.profile
-	rpi-update
-	reboot
-
-	" | sudo tee /etc/init.d/install.sh > /dev/null
-	sudo chmod 755 /etc/init.d/install.sh
-	sudo update-rc.d install.sh defaults
-	sudo raspi-config
-fi
-
 ./make.sh
-DIR=`pwd`
 cd /home/pi
 
 echo "upgrading and installing software..."

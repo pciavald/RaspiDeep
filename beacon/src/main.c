@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pciavald <pciavald@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/05/14 19:10:49 by pciavald          #+#    #+#             */
-/*   Updated: 2015/05/16 16:16:07 by pciavald         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "RPI.h"
 #include <stdlib.h>
 #include <signal.h>
@@ -19,9 +7,9 @@ int		ctrl_system(int state)
 	int		result;
 
 	if (state == 1)
-		result = system("/home/pi/RaspiDeep/script/active_mode.sh");
+		result = system("$RASPIDEEP/script/active_mode.sh");
 	else
-		result = system("/home/pi/RaspiDeep/script/passive_mode.sh");
+		result = system("$RASPIDEEP/script/passive_mode.sh");
 	if (WIFSIGNALED(result))
 	{
 		printf("Exited with signal %d\n", WTERMSIG(result));
