@@ -19,7 +19,7 @@ fi
 
 echo "setting locales to $LOCALE.UTF-8..."
 if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
-	echo "
+	echo "\
 	export LANGUAGE=$LOCALE.UTF-8
 	export LANG=$LOCALE.UTF-8
 	export LC_ALL=$LOCALE.UTF-8
@@ -39,7 +39,7 @@ curl -SLs https://apt.adafruit.com/add | sudo bash
 sudo apt-get install raspberrypi-bootloader=1.20150528-1
 sudo apt-get install adafruit-pitft-helper
 sudo adafruit-pitft-helper -t 28r
-echo '
+echo '\
 Section "Device"
   Identifier "Adafruit PiTFT"
   Driver "fbdev"
@@ -51,14 +51,14 @@ BLANK_DPMS=off
 POWERDOWN_TIME=0" | sudo tee /etc/kbd/config > /dev/null
 
 echo "setting up interfaces..."
-echo "
+echo "\
 auto lo
   iface lo inet loopback
 auto eth0
   iface eth0 inet dhcp
 iface wlan0 inet static
   address 192.168.42.2" | sudo tee /etc/network/interfaces > /dev/null
-echo $SSID | wpa_passphrase $PWD | sudo tee /etc/wpa_supplicant.conf > /dev/null
+echo $PWD | wpa_passphrase $SSID | sudo tee /etc/wpa_supplicant.conf > /dev/null
 
 echo "installing desktop shortcuts"
 sudo rm -r /home/pi/Desktop /home/pi/confirm > /dev/null
