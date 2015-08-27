@@ -6,6 +6,8 @@ PWD="Raspberry71"
 
 LOCALE="fr_FR"
 
+#TODO save whole desktop, change password
+
 #"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 
 DIR=`pwd`

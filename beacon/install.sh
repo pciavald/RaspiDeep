@@ -8,7 +8,7 @@
 
 # settings for WiFi access point
 SSID="Ocean71"
-PWD="Raspberry71"
+PASS="Raspberry71"
 
 LOCALE="fr_FR"
 
@@ -74,7 +74,7 @@ if ! sudo ls /usr/sbin/hostapd.FCS > /dev/null; then
 fi
 
 echo "generating startup script..."
-echo "
+echo "\
 ### BEGIN INIT INFO
 # Provides:          beacon
 # Required-Start:    $local_fs $network
@@ -92,7 +92,7 @@ sudo chmod 755 /etc/init.d/setup.sh
 sudo update-rc.d setup.sh defaults
 
 echo "generating /etc/udhcpd.conf..."
-echo "
+echo "\
 start 192.168.42.2
 end 192.168.42.20
 interface wlan0
@@ -108,7 +108,7 @@ echo 'DHCPD_OPTS="-S"' | sudo tee /etc/default/udhcpd > /dev/null
 echo "configuring interfaces..."
 sudo ifconfig wlan0 up
 sudo ifconfig wlan0 192.168.42.1
-echo "
+echo "\
 auto lo
 iface lo inet loopback
 auto eth0
@@ -125,7 +125,7 @@ if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf > /dev/null; then
 fi
 
 echo "generating /etc/hostapd/hostapd.conf..."
-echo "
+echo "\
 interface=wlan0
 driver=rtl871xdrv
 ssid=$SSID
@@ -135,7 +135,7 @@ macaddr_acl=0
 auth_algs=1
 ignore_broadcast_ssid=0
 wpa=2
-wpa_passphrase=$PWD
+wpa_passphrase=$PASS
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
 rsn_pairwise=CCMP" | sudo tee /etc/hostapd/hostapd.conf > /dev/null
@@ -157,9 +157,9 @@ sudo update-rc.d vncboot.sh defaults
 expect << EOF
 spawn "/usr/bin/vncpasswd"
 expect "Password:"
-send "$PWD\r"
+send "$PASS\r"
 expect "Verify:"
-send "$PWD\r"
+send "$PASS\r"
 expect "Would you like to enter a view-only password (y/n)?\r"
 send "n"
 exit
