@@ -12,7 +12,7 @@ DIR=`pwd`
 if ! grep -q "RASPIDEEP" /home/pi/.profile > /dev/null; then
 	echo "export RASPIDEEP=$DIR" >> /home/pi/.profile
 	sudo rpi-update
-	sudo raspi-config
+	sudo raspi-config # expand filesystem, boot to desktop
 	sudo reboot
 	exit 0
 fi
@@ -32,9 +32,13 @@ fi
 
 sudo apt-get update
 sudo apt-get dist-upgrade -y
-sudo apt-get -y install mplayer vim tightvncserver
+sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl
 
 echo "setting up PiTFT..."
+curl -SLs https://apt.adafruit.com/add | sudo bash
+sudo apt-get install raspberrypi-bootloader=1.20150528-1
+sudo apt-get install adafruit-pitft-helper
+sudo adafruit-pitft-helper -t 28r
 echo '
 Section "Device"
   Identifier "Adafruit PiTFT"
@@ -59,3 +63,11 @@ echo $SSID | wpa_passphrase $PWD | sudo tee /etc/wpa_supplicant.conf > /dev/null
 echo "installing desktop shortcuts"
 sudo rm -r /home/pi/Desktop /home/pi/confirm > /dev/null
 cp -r $DIR/Desktop $DIR/confirm /home/pi
+
+echo "reducing lxde bar..."
+sed -i "s/autohide=0/autohide=1/" /home/pi/.config/lxpanel/LXDE-pi/panels/panel
+sed -i "s/heightwhenhidden=2/heightwhenhidden=0/" /home/pi/.config/lxpanel/LXDE-pi/panels/panel
+
+echo "hiding trash, setting wallpaper, "
+sed -i "s/show_trash=1/show_trash=0/" /home/pi/.config/pcmanfm/LXDE-pi/desktop-items-0.conf
+#TODO set wallpaper

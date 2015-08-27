@@ -17,7 +17,8 @@ LOCALE="fr_FR"
 DIR=`pwd`
 if ! grep -q "RASPIDEEP" /home/pi/.profile > /dev/null; then
 	echo "export RASPIDEEP=$DIR" >> /home/pi/.profile
-	sudo raspi-config
+	sudo rpi-update
+	sudo raspi-config # expand filesystem, enable camera
 	exit 0
 fi
 
@@ -38,7 +39,6 @@ fi
 cd /home/pi
 
 echo "upgrading and installing software..."
-sudo rpi-update
 sudo apt-get update
 sudo apt-get autoremove -y sonic-pi
 sudo apt-get dist-upgrade -y
