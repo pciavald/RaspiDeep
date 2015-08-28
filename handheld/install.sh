@@ -62,6 +62,18 @@ iface wlan0 inet static
   address 192.168.42.2" | sudo tee /etc/network/interfaces > /dev/null
 echo $PASS | wpa_passphrase $SSID | sudo tee /etc/wpa_supplicant.conf > /dev/null
 
+expect << EOF
+spawn "/usr/bin/vncpasswd"
+expect "Password:"
+send "$PASS\r"
+expect "Verify:"
+send "$PASS\r"
+expect "Would you like to enter a view-only password (y/n)?\r"
+send "n"
+exit
+EOF
+tightvncserver
+
 echo "installing desktop shortcuts"
 sudo rm -r /home/pi/Desktop /home/pi/confirm > /dev/null
 cp -r $DIR/Desktop $DIR/confirm /home/pi
