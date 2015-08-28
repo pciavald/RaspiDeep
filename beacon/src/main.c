@@ -1,15 +1,26 @@
 #include "RPI.h"
 #include <stdlib.h>
 #include <signal.h>
+#include <string.h>
 
-int		ctrl_system(int state)
+int		ctrl_system(int state, char * path)
 {
 	int		result;
+	char	fullpath[256] = {0};
 
+	strncat(fullpath, path, strlen(path));
+	if (fullpath[strlen(path)] != '/')
+		strncat(fullpath, "/", 1);
 	if (state == 1)
-		result = system("$RASPIDEEP/script/active_mode.sh");
+	{
+		strncat(fullpath, "script/active_mode.sh", 21);
+		result = system(fullpath);
+	}
 	else
-		result = system("$RASPIDEEP/script/passive_mode.sh");
+	{
+		strncat(fullpath, "script/passive_mode.sh", 22);
+		result = system(fullpath);
+	}
 	if (WIFSIGNALED(result))
 	{
 		printf("Exited with signal %d\n", WTERMSIG(result));
@@ -18,10 +29,12 @@ int		ctrl_system(int state)
 	return (1);
 }
 
-int		main(void)
+int		main(int argc, char ** argv)
 {
 	int		state = 0;
 
+	if (argc != 2)
+		exit (-1);
 	gpio_init();
 	gpio_in(4);
 	while (42)
@@ -31,7 +44,7 @@ int		main(void)
 			state = !state;
 			while (gpio_state(4, DN) == 1)
 				;
-			if (ctrl_system(state) == 0)
+			if (ctrl_system(state, argv[1]) == 0)
 				break ;
 		}
 		usleep(5000);
