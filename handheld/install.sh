@@ -65,7 +65,7 @@ send "y\r"
 exit
 EOF
 echo
-echo '\
+echo '
 Section "Device"
   Identifier "Adafruit PiTFT"
   Driver "fbdev"
