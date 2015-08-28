@@ -32,30 +32,17 @@ if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
 
-if 0 * 3600 * 24; then
+if [[ $(( $(date +%s) - $(stat -c %Y /var/cache/apt/) )) > $((3600 * 24)) ]]; then
 	sudo apt-get update
 fi
 sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect
 
+echo "setting up PiTFT..."
 if ! grep -q "adafruit" /etc/apt/sources.list > /dev/null; then
-	echo "setting up PiTFT..."
 	curl -SLs https://apt.adafruit.com/add | sudo bash
 	sudo apt-get install raspberrypi-bootloader=1.20150528-1
 	sudo apt-get install adafruit-pitft-helper
 fi
-
-expect << EOF
-spawn "/usr/bin/vncpasswd"
-expect "Password:"
-send "$SSID\r"
-expect "Verify:"
-send "$SSID\r"
-expect "Would you like to enter a view-only password (y/n)? "
-send "n\r"
-exit
-EOF
-echo
-
 sudo expect << EOF
 spawn {/usr/bin/sudo} {/usr/bin/adafruit-pitft-helper} -t 28r
 expect "Would you like the console to appear on the PiTFT display? \[y/n\] "
@@ -71,10 +58,35 @@ Section "Device"
   Driver "fbdev"
   Option "fbdev" "/dev/fb1"
 EndSection' | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
+if ! grep -q "pi1" /boot/config.txt > /dev/null; then
+	echo "\
+[pi1]
+device_tree=bcm2708-rpi-b-plus.dtb
+[pi2]
+device_tree=bcm2709-rpi-2-b.dtb
+[all]
+dtparam=spi=on
+dtparam=i2c1=on
+dtparam=i2c_arm=on
+dtoverlay=pitft28r,rotate=90,speed=32000000,fps=20" | sudo tee --append /boot/config.txt > /dev/null
+fi
 echo "
 BLANK_TIME=0
 BLANK_DPMS=off
 POWERDOWN_TIME=0" | sudo tee /etc/kbd/config > /dev/null
+
+echo "setting vnc password"
+expect << EOF
+spawn "/usr/bin/vncpasswd"
+expect "Password:"
+send "$SSID\r"
+expect "Verify:"
+send "$SSID\r"
+expect "Would you like to enter a view-only password (y/n)? "
+send "n\r"
+exit
+EOF
+echo
 
 echo "setting up interfaces..."
 echo "\
@@ -82,8 +94,11 @@ auto lo
   iface lo inet loopback
 auto eth0
   iface eth0 inet dhcp
-iface wlan0 inet static
-  address 192.168.42.2" | sudo tee /etc/network/interfaces > /dev/null
+iface wlan0 inet manual
+  wpa-roam /etc/wpa_supplicant.conf
+iface default inet static
+  address 192.168.42.2
+  gateway 192.168.42.1" | sudo tee /etc/network/interfaces > /dev/null
 echo $PASS | wpa_passphrase $SSID | sudo tee /etc/wpa_supplicant.conf > /dev/null
 
 echo "installing desktop shortcuts"
