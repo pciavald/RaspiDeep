@@ -32,7 +32,7 @@ if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
 
-sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl
+sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect
 
 echo "setting up PiTFT..."
 curl -SLs https://apt.adafruit.com/add | sudo bash
@@ -51,7 +51,7 @@ exit
 EOF
 
 sudo expect << EOF
-spawn "adafruit-pitft-helper -t 28r"
+spawn "/usr/bin/adafruit-pitft-helper -t 28r"
 expect "Would you like the console to appear on the PiTFT display? [y/n]"
 send "y\r"
 expect "Would you like GPIO #23 to act as a on/off button? [y/n] y"
@@ -81,7 +81,7 @@ iface wlan0 inet static
 echo $PASS | wpa_passphrase $SSID | sudo tee /etc/wpa_supplicant.conf > /dev/null
 
 echo "installing desktop shortcuts"
-sudo rm -r /home/pi/Desktop /home/pi/confirm > /dev/null
+sudo rm -r /home/pi/Desktop /home/pi/confirm 2> /dev/null
 cp -r $DIR/Desktop $DIR/confirm /home/pi
 
 echo "reducing lxde bar..."
