@@ -65,12 +65,12 @@ send "y\r"
 exit
 EOF
 echo
-#echo '\
-#Section "Device"
-#  Identifier "Adafruit PiTFT"
-#  Driver "fbdev"
-#  Option "fbdev" "/dev/fb1"
-#EndSection' | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
+echo '\
+Section "Device"
+  Identifier "Adafruit PiTFT"
+  Driver "fbdev"
+  Option "fbdev" "/dev/fb1"
+EndSection' | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
 echo "
 BLANK_TIME=0
 BLANK_DPMS=off
