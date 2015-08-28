@@ -53,7 +53,7 @@ exit
 EOF
 
 sudo expect << EOF
-spawn "/usr/bin/sudo /usr/bin/adafruit-pitft-helper -t 28r"
+spawn {/usr/bin/sudo /usr/bin/adafruit-pitft-helper -t 28r}
 expect "Would you like the console to appear on the PiTFT display? [y/n]"
 send "y\r"
 expect "Would you like GPIO #23 to act as a on/off button? [y/n] y"
