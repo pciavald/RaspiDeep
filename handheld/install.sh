@@ -77,7 +77,7 @@ POWERDOWN_TIME=0" | sudo tee /etc/kbd/config > /dev/null
 
 echo "installing libs"
 if [ ! -f /opt/vc/lib/libbcm_host.so ]; then
-	cp $RASPIDEEP/lib/* /opt/vc/lib/
+	sudo cp $RASPIDEEP/lib/* /opt/vc/lib/
 fi
 
 echo "setting vnc password"
