@@ -34,10 +34,12 @@ fi
 
 sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect
 
-echo "setting up PiTFT..."
-curl -SLs https://apt.adafruit.com/add | sudo bash
-sudo apt-get install raspberrypi-bootloader=1.20150528-1
-sudo apt-get install adafruit-pitft-helper
+if ! grep -q "adafruit" /etc/apt/sources.list > /dev/null; then
+	echo "setting up PiTFT..."
+	curl -SLs https://apt.adafruit.com/add | sudo bash
+	sudo apt-get install raspberrypi-bootloader=1.20150528-1
+	sudo apt-get install adafruit-pitft-helper
+fi
 
 expect << EOF
 spawn "/usr/bin/vncpasswd"
