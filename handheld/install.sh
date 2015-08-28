@@ -32,6 +32,9 @@ if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
 
+if 1 * 3600 * 24; then
+	sudo apt-get update
+fi
 sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect
 
 if ! grep -q "adafruit" /etc/apt/sources.list > /dev/null; then
@@ -47,27 +50,27 @@ expect "Password:"
 send "$SSID\r"
 expect "Verify:"
 send "$SSID\r"
-expect "Would you like to enter a view-only password (y/n)?\r"
-send "n"
+expect "Would you like to enter a view-only password (y/n)? "
+send "n\r"
 exit
 EOF
 echo
 
 sudo expect << EOF
 spawn {/usr/bin/sudo} {/usr/bin/adafruit-pitft-helper} -t 28r
-expect "Would you like the console to appear on the PiTFT display? \[y/n\]"
+expect "Would you like the console to appear on the PiTFT display? \[y/n\] "
 send "y\r"
-expect "Would you like GPIO #23 to act as a on/off button? \[y/n\]"
+expect "Would you like GPIO #23 to act as a on/off button? \[y/n\] "
 send "y\r"
 exit
 EOF
 echo
-echo '\
-Section "Device"
-  Identifier "Adafruit PiTFT"
-  Driver "fbdev"
-  Option "fbdev" "/dev/fb1"
-EndSection' | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
+#echo '\
+#Section "Device"
+#  Identifier "Adafruit PiTFT"
+#  Driver "fbdev"
+#  Option "fbdev" "/dev/fb1"
+#EndSection' | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
 echo "
 BLANK_TIME=0
 BLANK_DPMS=off
