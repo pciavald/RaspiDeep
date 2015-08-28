@@ -32,7 +32,7 @@ if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
 
-if 1 * 3600 * 24; then
+if 0 * 3600 * 24; then
 	sudo apt-get update
 fi
 sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect
