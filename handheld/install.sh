@@ -2,7 +2,7 @@
 
 # settings for WiFi access point
 SSID="Ocean71"
-PWD="Raspberry71"
+PASS="Raspberry71"
 
 LOCALE="fr_FR"
 
@@ -60,7 +60,7 @@ auto eth0
   iface eth0 inet dhcp
 iface wlan0 inet static
   address 192.168.42.2" | sudo tee /etc/network/interfaces > /dev/null
-echo $PWD | wpa_passphrase $SSID | sudo tee /etc/wpa_supplicant.conf > /dev/null
+echo $PASS | wpa_passphrase $SSID | sudo tee /etc/wpa_supplicant.conf > /dev/null
 
 echo "installing desktop shortcuts"
 sudo rm -r /home/pi/Desktop /home/pi/confirm > /dev/null
