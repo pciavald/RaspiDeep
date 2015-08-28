@@ -32,21 +32,39 @@ if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
 
-sudo apt-get update
-sudo apt-get dist-upgrade -y
 sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl
 
 echo "setting up PiTFT..."
 curl -SLs https://apt.adafruit.com/add | sudo bash
 sudo apt-get install raspberrypi-bootloader=1.20150528-1
 sudo apt-get install adafruit-pitft-helper
-sudo adafruit-pitft-helper -t 28r
-echo '\
-Section "Device"
-  Identifier "Adafruit PiTFT"
-  Driver "fbdev"
-  Option "fbdev" "/dev/fb1"
-EndSection' | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
+
+expect << EOF
+spawn "/usr/bin/vncpasswd"
+expect "Password:"
+send "$PASS\r"
+expect "Verify:"
+send "$PASS\r"
+expect "Would you like to enter a view-only password (y/n)?\r"
+send "n"
+exit
+EOF
+
+sudo expect << EOF
+spawn "adafruit-pitft-helper -t 28r"
+expect "Would you like the console to appear on the PiTFT display? [y/n]"
+send "y\r"
+expect "Would you like GPIO #23 to act as a on/off button? [y/n] y"
+send "y\r"
+exit
+EOF
+#sudo adafruit-pitft-helper -t 28r
+#echo '\
+#Section "Device"
+#  Identifier "Adafruit PiTFT"
+#  Driver "fbdev"
+#  Option "fbdev" "/dev/fb1"
+#EndSection' | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
 echo "
 BLANK_TIME=0
 BLANK_DPMS=off
@@ -61,18 +79,6 @@ auto eth0
 iface wlan0 inet static
   address 192.168.42.2" | sudo tee /etc/network/interfaces > /dev/null
 echo $PASS | wpa_passphrase $SSID | sudo tee /etc/wpa_supplicant.conf > /dev/null
-
-expect << EOF
-spawn "/usr/bin/vncpasswd"
-expect "Password:"
-send "$PASS\r"
-expect "Verify:"
-send "$PASS\r"
-expect "Would you like to enter a view-only password (y/n)?\r"
-send "n"
-exit
-EOF
-tightvncserver
 
 echo "installing desktop shortcuts"
 sudo rm -r /home/pi/Desktop /home/pi/confirm > /dev/null
