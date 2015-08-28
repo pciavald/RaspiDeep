@@ -44,9 +44,9 @@ fi
 expect << EOF
 spawn "/usr/bin/vncpasswd"
 expect "Password:"
-send "$PASS\r"
+send "$SSID\r"
 expect "Verify:"
-send "$PASS\r"
+send "$SSID\r"
 expect "Would you like to enter a view-only password (y/n)?\r"
 send "n"
 exit
@@ -61,13 +61,13 @@ expect "Would you like GPIO #23 to act as a on/off button? \[y/n\]"
 send "y\r"
 exit
 EOF
-#sudo adafruit-pitft-helper -t 28r
-#echo '\
-#Section "Device"
-#  Identifier "Adafruit PiTFT"
-#  Driver "fbdev"
-#  Option "fbdev" "/dev/fb1"
-#EndSection' | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
+echo
+echo '\
+Section "Device"
+  Identifier "Adafruit PiTFT"
+  Driver "fbdev"
+  Option "fbdev" "/dev/fb1"
+EndSection' | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
 echo "
 BLANK_TIME=0
 BLANK_DPMS=off
