@@ -86,6 +86,7 @@ echo "\
 ### END INIT INFO
 #!/bin/sh
 echo 'starting beacon...'
+export RASPIDEEP=$DIR
 $DIR/script/init.sh
 " | sudo tee /etc/init.d/setup.sh > /dev/null
 sudo chmod 755 /etc/init.d/setup.sh
@@ -106,18 +107,18 @@ echo "generating /etc/default/udhcpd..."
 echo 'DHCPD_OPTS="-S"' | sudo tee /etc/default/udhcpd > /dev/null
 
 echo "configuring interfaces..."
-sudo ifconfig wlan0 up
-sudo ifconfig wlan0 192.168.42.1
 echo "\
 auto lo
-iface lo inet loopback
+  iface lo inet loopback
 auto eth0
-iface eth0 inet dhcp
+  iface eth0 inet dhcp
 iface wlan0 inet static
-address 192.168.42.1
-netmask 255.255.255.0
+  address 192.168.42.1
+  netmask 255.255.255.0
 auto wlan1
-iface wlan1 inet dhcp" | sudo tee /etc/network/interfaces > /dev/null
+  iface wlan1 inet dhcp" | sudo tee /etc/network/interfaces > /dev/null
+sudo ifconfig wlan0 up
+sudo ifconfig wlan0 192.168.42.1
 
 echo "make it responsible for its network..."
 if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf > /dev/null; then
@@ -149,6 +150,9 @@ sudo service udhcpd start
 echo "enabling hostapd and udhcpd at startup..."
 sudo update-rc.d hostapd enable
 sudo update-rc.d udhcpd enable
+echo "enabling camstream service..."
+sudo cp $DIR/conf/camstream.sh /ect/init.d/
+sudo chmod 755 /etc/init.d/camstream.sh
 
 echo "configuring and enabling vnc server..."
 sudo cp $DIR/conf/vncboot.sh /etc/init.d/vncboot.sh
@@ -157,9 +161,9 @@ sudo update-rc.d vncboot.sh defaults
 expect << EOF
 spawn "/usr/bin/vncpasswd"
 expect "Password:"
-send "$PASS\r"
+send "$SSID\r"
 expect "Verify:"
-send "$PASS\r"
+send "$SSID\r"
 expect "Would you like to enter a view-only password (y/n)?\r"
 send "n"
 exit
