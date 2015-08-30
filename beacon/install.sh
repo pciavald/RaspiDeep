@@ -42,7 +42,7 @@ echo "upgrading and installing software..."
 sudo apt-get update
 sudo apt-get autoremove -y sonic-pi
 sudo apt-get dist-upgrade -y
-sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver htop expect
+sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver htop expect libv4l-dev
 
 echo "installing UV4L..."
 if ! grep -q "uv4l" /etc/apt/sources.list > /dev/null; then
