@@ -113,6 +113,10 @@ echo "installing desktop shortcuts"
 sudo rm -r /home/pi/Desktop /home/pi/confirm 2> /dev/null
 cp -r $DIR/Desktop $DIR/confirm /home/pi
 
+export DISPLAY=:0
+pcmanfm
+sleep 1
+sudo killall pcmanfm
 echo "reducing lxde bar..."
 sed -i "s/autohide=0/autohide=1/" /home/pi/.config/lxpanel/LXDE-pi/panels/panel
 sed -i "s/heightwhenhidden=2/heightwhenhidden=1/" /home/pi/.config/lxpanel/LXDE-pi/panels/panel
