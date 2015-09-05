@@ -37,6 +37,9 @@ fi
 #fi
 sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect cmake
 
+echo "replacing mplayer with correct libav version..."
+sudo mv mplayer `which mplayer`
+
 echo "setting up PiTFT..."
 if ! grep -q "adafruit" /etc/apt/sources.list > /dev/null; then
 	curl -SLs https://apt.adafruit.com/add | sudo bash
