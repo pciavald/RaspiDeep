@@ -35,7 +35,7 @@ fi
 if [[ $(( $(date +%s) - $(stat -c %Y /var/cache/apt/) )) > $((3600 * 24)) ]]; then
 	sudo apt-get update
 fi
-sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect
+sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect cmake
 
 echo "setting up PiTFT..."
 if ! grep -q "adafruit" /etc/apt/sources.list > /dev/null; then
@@ -112,7 +112,7 @@ cp -r $DIR/Desktop $DIR/confirm /home/pi
 
 echo "reducing lxde bar..."
 sed -i "s/autohide=0/autohide=1/" /home/pi/.config/lxpanel/LXDE-pi/panels/panel
-sed -i "s/heightwhenhidden=2/heightwhenhidden=0/" /home/pi/.config/lxpanel/LXDE-pi/panels/panel
+sed -i "s/heightwhenhidden=2/heightwhenhidden=1/" /home/pi/.config/lxpanel/LXDE-pi/panels/panel
 
 echo "hiding trash, setting wallpaper, "
 sed -i "s/show_trash=1/show_trash=0/" /home/pi/.config/pcmanfm/LXDE-pi/desktop-items-0.conf

@@ -19,8 +19,9 @@ export USER HOME
 case "$1" in
 	start)
 		echo "Starting camera streaming service."
+		sudo modprobe bcm2835-v4l2
 		LD_PRELOAD=/usr/lib/uv4l/uv4lext/armv6l/libuv4lext.so mjpg_streamer \
-			-i "/usr/local/lib/input_uvc.so -d /dev/video0 -r 320x240 -f 15" \
+			-i "/usr/local/lib/input_uvc.so -d /dev/video0 -r 320x240 -f 15 -n -y" \
 			-o "/usr/local/lib/output_http.so -w /usr/local/www -p 5001" &
 		;;
 
@@ -34,21 +35,3 @@ case "$1" in
 		exit 1
 		;;
 esac
-
-#Daemon=mjpg_streamer
-#DaemonBase=/usr/local
-#DaemonArgs="-i \"input_raspicam.so -fps 5 -hf -vf\" -o \"output_http.so\""
-#
-#case "$1" in
-#	start)
-#		eval LD_LIBRARY_PATH=${DaemonBase}/lib ${DaemonBase}/bin/${Daemon} ${DaemonArgs} >/dev/null 2>&1 &
-#		echo "$0: started"
-#		;;
-#	stop)
-#		pkill -x ${Daemon}
-#		echo "$0: stopped"
-#		;;
-#	*)
-#		echo "Usage: $0 {start|stop}" >&2
-#		;;
-#esac
