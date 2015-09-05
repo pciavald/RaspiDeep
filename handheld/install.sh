@@ -40,8 +40,8 @@ sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential c
 echo "setting up PiTFT..."
 if ! grep -q "adafruit" /etc/apt/sources.list > /dev/null; then
 	curl -SLs https://apt.adafruit.com/add | sudo bash
-	sudo apt-get install raspberrypi-bootloader=1.20150528-1
-	sudo apt-get install adafruit-pitft-helper
+	sudo apt-get install -y raspberrypi-bootloader=1.20150528-1
+	sudo apt-get install -y adafruit-pitft-helper
 fi
 sudo expect << EOF
 spawn {/usr/bin/sudo} {/usr/bin/adafruit-pitft-helper} -t 28r
