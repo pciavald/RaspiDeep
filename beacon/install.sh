@@ -42,7 +42,7 @@ echo "upgrading and installing software..."
 sudo apt-get update
 sudo apt-get autoremove -y sonic-pi
 sudo apt-get dist-upgrade -y
-sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver htop expect libv4l-dev
+sudo apt-get install -y hostapd udhcpd vim build-essential tightvncserver htop expect libv4l-dev cmake
 
 echo "installing UV4L..."
 if ! grep -q "uv4l" /etc/apt/sources.list > /dev/null; then
@@ -88,9 +88,9 @@ echo "\
 echo 'starting beacon...'
 export RASPIDEEP=$DIR
 $DIR/script/init.sh
-" | sudo tee /etc/init.d/setup.sh > /dev/null
-sudo chmod 755 /etc/init.d/setup.sh
-sudo update-rc.d setup.sh defaults
+" | sudo tee /etc/init.d/setup > /dev/null
+sudo chmod 755 /etc/init.d/setup
+sudo update-rc.d setup defaults
 
 echo "generating /etc/udhcpd.conf..."
 echo "\
@@ -151,13 +151,13 @@ echo "enabling hostapd and udhcpd at startup..."
 sudo update-rc.d hostapd enable
 sudo update-rc.d udhcpd enable
 echo "enabling camstream service..."
-sudo cp $DIR/conf/camstream.sh /ect/init.d/
-sudo chmod 755 /etc/init.d/camstream.sh
+sudo cp $DIR/conf/camstream.sh /ect/init.d/camstream
+sudo chmod 755 /etc/init.d/camstream
 
 echo "configuring and enabling vnc server..."
-sudo cp $DIR/conf/vncboot.sh /etc/init.d/vncboot.sh
-sudo chmod 755 /etc/init.d/vncboot.sh
-sudo update-rc.d vncboot.sh defaults
+sudo cp $DIR/conf/vncboot.sh /etc/init.d/vnc
+sudo chmod 755 /etc/init.d/vnc
+sudo update-rc.d vnc defaults
 expect << EOF
 spawn "/usr/bin/vncpasswd"
 expect "Password:"
@@ -169,4 +169,4 @@ send "n"
 exit
 EOF
 echo -n "\n"
-sudo service vncboot.sh start
+sudo service vnc start
