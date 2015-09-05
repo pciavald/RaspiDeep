@@ -32,15 +32,15 @@ if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
 
-if [[ $(( $(date +%s) - $(stat -c %Y /var/cache/apt/) )) > $((3600 * 24)) ]]; then
+#if [[ $(( $(date +%s) - $(stat -c %Y /var/cache/apt/) )) > $((3600 * 24)) ]]; then
 	sudo apt-get update
-fi
+#fi
 sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect cmake
 
 echo "setting up PiTFT..."
 if ! grep -q "adafruit" /etc/apt/sources.list > /dev/null; then
 	curl -SLs https://apt.adafruit.com/add | sudo bash
-	sudo apt-get install -y raspberrypi-bootloader=1.20150528-1
+	sudo apt-get install -y raspberrypi-bootloader
 	sudo apt-get install -y adafruit-pitft-helper
 fi
 sudo expect << EOF
@@ -52,12 +52,12 @@ send "y\r"
 exit
 EOF
 echo
-echo '
-Section "Device"
-  Identifier "Adafruit PiTFT"
-  Driver "fbdev"
-  Option "fbdev" "/dev/fb1"
-EndSection' | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
+echo "\
+Section \"Device\"
+  Identifier \"Adafruit PiTFT\"
+  Driver \"fbdev\"
+  Option \"fbdev\" \"/dev/fb1\"
+EndSection" | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
 if ! grep -q "pi1" /boot/config.txt > /dev/null; then
 	echo "\
 [pi1]
@@ -70,7 +70,7 @@ dtparam=i2c1=on
 dtparam=i2c_arm=on
 dtoverlay=pitft28r,rotate=90,speed=32000000,fps=20" | sudo tee --append /boot/config.txt > /dev/null
 fi
-echo "
+echo "\
 BLANK_TIME=0
 BLANK_DPMS=off
 POWERDOWN_TIME=0" | sudo tee /etc/kbd/config > /dev/null
