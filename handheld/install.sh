@@ -132,4 +132,11 @@ sed -i "s/toolbar=newtab;navigation;home;/toolbar=hidden;newtab;navigation;home;
 sed -i "s/show_statusbar=1/show_statusbar=0/" /home/pi/.config/pcmanfm/LXDE-pi/pcmanfm.conf
 sed -i "s/single_click=0/single_click=1/" /home/pi/.config/libfm/libfm.conf
 sed -i "s/auto_selection_delay=600/auto_selection_delay=0/" /home/pi/.config/libfm/libfm.conf
+
+echo "setting list view"
+echo "\
+[/home/pi/Desktop/confs]
+Sort=gicon;ascending;
+ViewMode=compact
+ShowHidden=false" >> /home/pi/.config/libfm/dir-settings.conf
 #TODO set wallpaper
