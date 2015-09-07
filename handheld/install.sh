@@ -35,7 +35,7 @@ fi
 #if [[ $(( $(date +%s) - $(stat -c %Y /var/cache/apt/) )) > $((3600 * 24)) ]]; then
 	sudo apt-get update
 #fi
-sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect cmake
+sudo apt-get -y install mplayer mplayer-gui vim tightvncserver imagemagick build-essential curl expect cmake
 
 echo "replacing mplayer with correct libav version..."
 sudo mv mplayer `which mplayer`
