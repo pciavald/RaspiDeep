@@ -152,7 +152,7 @@ echo "enabling hostapd and udhcpd at startup..."
 sudo update-rc.d hostapd enable
 sudo update-rc.d udhcpd enable
 echo "enabling camstream service..."
-sudo cp $DIR/conf/camstream.sh /ect/init.d/camstream
+sudo cp $DIR/conf/camstream.sh /etc/init.d/camstream
 sudo chmod 755 /etc/init.d/camstream
 
 echo "configuring and enabling vnc server..."
@@ -170,4 +170,4 @@ send "n"
 exit
 EOF
 echo -n "\n"
-sudo service vnc start
+sudo service vnc start #TODO password ?
