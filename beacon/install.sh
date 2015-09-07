@@ -53,7 +53,7 @@ if ! grep -q "uv4l" /etc/apt/sources.list > /dev/null; then
 		| sudo tee --append /etc/apt/sources.list
 	sudo apt-get update
 fi
-sudo apt-get install -y uv4l
+sudo apt-get install -y uv4l libv4l-dev
 sudo apt-get install -y uv4l-raspicam uv4l-uvc uv4l-mjpegstream uv4l-raspicam-extras
 
 echo "installing mjpg-streamer..."
