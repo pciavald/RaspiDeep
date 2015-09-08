@@ -1,0 +1,20 @@
+;image=file
+image=symbols2
+
+;"character"=x,y,width,height
+"p"= 205,0,9,8  ; play symbol
+"e"=215,0,9,8  ; pause symbol
+":"=224,0,4,8
+"s"=195,0,9,8  ; stop symbol
+"f"=1,0,22,8 ; file: f
+"v"=56,0,22,8 ; video cd
+; "?"=86,0,32,8   ; super video cd (svcd)
+"d"=26,0,22,8 ; dvd
+"u"=124,0,22,8 ; url
+"a"=64,0,22,8 ; cd
+"b"=255,0,22,8 ; tv/dvb
+;"n"=185,0,9,8 ; no sound symbol
+"n"=228,0,9,8 ; no sound symbol
+"m"=150,0,9,8 ; mono symbol
+"t"=160,0,15,8 ; stereo symbol
+"r"=240,0,12,8 ; surround symbol

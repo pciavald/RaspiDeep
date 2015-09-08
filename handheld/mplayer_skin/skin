@@ -1,0 +1,120 @@
+section = movieplayer
+
+ window = main
+
+  ;base=bitmap,x,y
+  ; x:            | y:
+  ;  -  0: left   |  -  0: top
+  ;  - -1: center |  - -1: center
+  ;  - -2: right  |  - -2: bottom
+  base = main, -2, -2
+
+  ;button=bitmap,x,y,sx,sy,msg
+
+  button = NULL,    45, 100, 30, 20, evExit
+  button = NULL,    44,   4, 30, 12, evLoadPlay
+  button = NULL,     6,  49, 20, 10, evEqualizer
+  button = NULL,     6,  60, 20, 10, evPreferences
+  button = NULL,   100,  49, 20, 10, evMute
+  button = NULL,   100,  60, 20, 10, evFullScreen
+
+  button = play,    21,  18, 30, 20, evPlaySwitchToPause
+  button = play,    21,  18, 30, 20, evPauseSwitchToPlay
+  button = stop,    59,  15, 24, 25, evStop
+
+  button = rev,     23,  72, 40, 20, evBackward10sec
+  button = forward, 58,  72, 40, 20, evForward10sec
+
+  ;hpotmeter=buttonbitmaps,sx,sy,phasebitmaps,phases,default value,x,y,sx,sy,msg
+  hpotmeter = NULL, 0, 0, volume,  20, 0, 26, 49, 70, 5, evSetVolume
+  hpotmeter = NULL, 0, 0, progres, 20, 0, 26, 64, 70, 5, evSetMoviePosition
+
+  ;font=fontfile
+  font =  symbols
+  font =     font
+  font = symbolsg
+
+  ;dynamic label
+  ;dlabel=x,y,sx,align,fontfile,string ...
+
+  dlabel = 25, 55,  56, 0, symbols, "$P"
+
+  dlabel = 35, 53,  56, 0,    font, "$1"
+  dlabel = 80, 55,  22, 0, symbols, "$a"
+
+ end
+
+ window = video
+
+  base = subblue, -1, -1
+
+  ;background=r,g,b
+  background = 128, 128, 255
+
+ end
+
+ window = menu
+
+  ;base=bitmap
+  base = menu
+
+  ;selected=bitmap
+  selected = menus
+
+  ;menu=x,y,width,height,msg
+
+  menu = 3,   6, 122, 14, evAbout
+  menu = 3,  28, 122, 14, evLoad
+  menu = 3,  43, 122, 14, evNone         ; Add playlist
+  menu = 3,  60, 122, 14, evPlay
+  menu = 3,  84, 122, 14, evPlaylist
+  menu = 3, 100, 122, 14, evEqualizer
+
+  menu = 3, 116, 122, 14, evSkinBrowser
+  menu = 3, 140, 122, 14, evPreferences
+;  menu = 3, 156, 122, 14, evNone
+  menu = 3, 180, 122, 14, evNormalSize
+  menu = 3, 196, 122, 14, evDoubleSize
+  menu = 3, 212, 122, 14, evFullScreen
+  menu = 3, 228, 122, 14, evIconify
+  menu = 3, 244, 122, 14, evExit
+ end
+
+ window = playbar
+
+  base = playbar, -1, -2
+
+  button = barstop,  77, 56, 27, 15, evStop
+  button = barplay,  54, 73, 27, 15, evPlaySwitchToPause
+  button = barplay,  54, 73, 27, 15, evPauseSwitchToPlay
+
+  button = barrev,  139, 37, 26, 15, evBackward10sec
+  button = barfwd,  174, 32, 27, 15, evForward10sec
+
+  button = barrevv, 107, 44, 27, 15, evBackward1min
+  button = barffwd, 209, 28, 27, 15, evForward1min
+
+  button = bareqb,  287, 32, 27, 15, evEqualizer
+  button = barzoom, 251, 28, 27, 15, evFullScreen
+  button = NULL,    327, 42, 27, 15, evPreferences
+
+  button = barmute, 359, 52, 27, 15, evMute
+  button = barexit, 386, 68, 27, 15, evExit
+
+  dlabel = 195, 59, 9, 0,   symbols, "$P"
+
+  dlabel = 205, 57, 56, 0,     font, "$1"
+  dlabel = 264, 59, 22, 0, symbolsg, "$a"
+
+  dlabel = 132, 70, 27, 0,  symbols, "$T "
+  dlabel = 160, 68, 95, 0,     font, "$o "
+
+  button = NULL, 258, 70, 11, 8, evDecVolume
+  button = NULL, 331, 70, 11, 8, evIncVolume
+
+  hpotmeter = pos, 13, 10, NULL, 100,  0, 120, 79, 231, 10, evSetMoviePosition
+  hpotmeter = pos, 13, 10, NULL,  50, 50, 269, 70,  61, 10, evSetVolume
+
+ end
+
+end

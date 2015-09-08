@@ -41,6 +41,7 @@ echo "replacing mplayer with correct libav version..."
 MPATH=`which mplayer | cut --complement -d/ -f5`
 sudo mv mplayer `which mplayer`
 sudo ln -sf `which mplayer` $MPATH/gmplayer
+sudo mv mplayer_skin /usr/local/share/mplayer/skins/default
 
 echo "setting up PiTFT..."
 if ! grep -q "adafruit" /etc/apt/sources.list > /dev/null; then
