@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Shutdown
-Comment="Shutdown"
-Icon=/usr/share/pixmaps/openbox.xpm
-Exec=sh -c "sudo shutdown -h now"
-Type=Application
-Encoding=UTF-8
-Terminal=false
-Categories=None;

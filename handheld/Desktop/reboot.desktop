@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Reboot
-Comment="Reboot"
-Icon=/usr/share/pixmaps/openbox.xpm
-Exec=sh -c "sudo reboot"
-Type=Application
-Encoding=UTF-8
-Terminal=false
-Categories=None;
