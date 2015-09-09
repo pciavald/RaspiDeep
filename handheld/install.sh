@@ -35,7 +35,7 @@ fi
 #if [[ $(( $(date +%s) - $(stat -c %Y /var/cache/apt/) )) > $((3600 * 24)) ]]; then
 	sudo apt-get update
 #fi
-sudo apt-get -y install mplayer mplayer-gui vim tightvncserver imagemagick build-essential curl expect cmake
+sudo apt-get -y install mplayer mplayer-gui vim tightvncserver imagemagick build-essential curl expect cmake htop
 
 echo "replacing mplayer with correct libav version..."
 MPATH=`which mplayer | cut --complement -d/ -f5`
@@ -111,6 +111,24 @@ iface default inet static
   address 192.168.42.2
   gateway 192.168.42.1" | sudo tee /etc/network/interfaces > /dev/null
 echo $PASS | wpa_passphrase $SSID | sudo tee /etc/wpa_supplicant.conf > /dev/null
+
+echo "generating startup script..."
+echo "\
+### BEGIN INIT INFO
+# Provides:          handheld
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: handheld
+# Description:       starting the handheld runtime
+### END INIT INFO
+#!/bin/sh
+echo 'starting handheld...'
+$DIR/init.sh
+" | sudo tee /etc/init.d/setup > /dev/null
+sudo chmod 755 /etc/init.d/setup
+sudo update-rc.d setup defaults
 
 echo "installing desktop shortcuts"
 sudo rm -r /home/pi/Desktop /home/pi/confirm 2> /dev/null
