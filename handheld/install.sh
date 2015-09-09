@@ -38,7 +38,7 @@ fi
 sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect cmake htop
 
 echo "replacing mplayer with correct libav version..."
-MPATH=`which mplayer | cut --complement -d/ -f5`
+MPATH=$(dirname `which mplayer`)
 sudo mv mplayer `which mplayer`
 sudo ln -sf `which mplayer` $MPATH/gmplayer
 sudo mkdir -p /usr/local/share/mplayer/skins
