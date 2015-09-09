@@ -141,6 +141,7 @@ sleep 1
 sudo killall pcmanfm
 sudo service lightdm stop
 sudo service lightdm start
+sleep 7
 
 echo "reducing lxde bar..."
 sed -i "s/autohide=0/autohide=1/" /home/pi/.config/lxpanel/LXDE-pi/panels/panel
