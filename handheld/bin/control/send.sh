@@ -1,7 +1,7 @@
 #!/bin/sh
 
 connect.sh
-sshpass -praspberry ssh -o StrictHostKeyChecking=no pi@192.168.42.1 "
+ssh.sh "
 rm /home/pi/RaspiDeep/record.sh 2> /dev/null
 $1 > /home/pi/RaspiDeep/record.sh
 chmod 755 /home/pi/RaspiDeep/record.sh"

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 connect.sh
-ssh pi@192.168.42.1 '
+ssh.sh "
 sudo rm -rf /home/pi/RaspiDeep/capture*
-sudo rm /home/pi/RaspiDeep/record.sh'
+sudo rm /home/pi/RaspiDeep/record.sh"
 disconnect.sh
