@@ -6,7 +6,7 @@ sudo service udhcpd stop
 sudo ifconfig wlan0 down
 echo 0 | sudo tee /sys/class/leds/led0/brightness > /dev/null
 echo 1 | sudo tee /sys/class/leds/led1/brightness > /dev/null
-if [ -f $RASPIDEEP/record.sh ]; then
+if [ -f /home/pi/record.sh ]; then
 	sleep 1
 	echo 0 | sudo tee /sys/class/leds/led1/brightness > /dev/null
 	sleep 1
@@ -14,9 +14,9 @@ if [ -f $RASPIDEEP/record.sh ]; then
 	sleep 1
 	echo 0 | sudo tee /sys/class/leds/led1/brightness > /dev/null
 	n=0;
-	while ! mkdir /home/pi/RaspiDeep/capture$n
+	while ! mkdir /home/pi/capture$n
 	do
 		n=$((n+1))
 	done;
-	sudo $RASPIDEEP/record.sh $n &
+	/home/pi/record.sh $n &
 fi

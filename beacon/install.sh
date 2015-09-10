@@ -26,10 +26,10 @@ fi
 echo "setting locales to $LOCALE.UTF-8..."
 if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	echo "
-	export LANGUAGE=$LOCALE.UTF-8
-	export LANG=$LOCALE.UTF-8
-	export LC_ALL=$LOCALE.UTF-8
-	export LC_CTYPE=$LOCALE.UTF-8" >> /home/pi/.profile
+export LANGUAGE=$LOCALE.UTF-8
+export LANG=$LOCALE.UTF-8
+export LC_ALL=$LOCALE.UTF-8
+export LC_CTYPE=$LOCALE.UTF-8" >> /home/pi/.profile
 	. /home/pi/.profile
 	sudo sed -i "s/^# $LOCALE.UTF-8/$LOCALE.UTF-8/" /etc/locale.gen
 	sudo locale-gen
@@ -132,7 +132,7 @@ interface=wlan0
 driver=rtl871xdrv
 ssid=$SSID
 hw_mode=g
-channel=6
+channel=2
 macaddr_acl=0
 auth_algs=1
 ignore_broadcast_ssid=0
@@ -169,5 +169,5 @@ expect "Would you like to enter a view-only password (y/n)?\r"
 send "n"
 exit
 EOF
-echo -n "\n"
+echo
 sudo service vnc start #TODO password ?
