@@ -12,8 +12,8 @@ LOCALE="fr_FR"
 
 DIR=`pwd`
 if ! grep -q "RASPIDEEP" /home/pi/.profile > /dev/null; then
-	echo "export RASPIDEEP=$DIR" >> /home/pi/.profile
 	sudo rpi-update
+	echo "export RASPIDEEP=$DIR" >> /home/pi/.profile
 	sudo raspi-config # expand filesystem, boot to desktop
 	sudo reboot
 	exit 0
@@ -21,36 +21,43 @@ fi
 
 echo "setting locales to $LOCALE.UTF-8..."
 if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
-	echo "\
-	export LANGUAGE=$LOCALE.UTF-8
-	export LANG=$LOCALE.UTF-8
-	export LC_ALL=$LOCALE.UTF-8
-	export LC_CTYPE=$LOCALE.UTF-8" >> /home/pi/.profile
-	. /home/pi/.profile
 	sudo sed -i "s/^# $LOCALE.UTF-8/$LOCALE.UTF-8/" /etc/locale.gen
 	sudo locale-gen
+	echo "\
+export LANGUAGE=$LOCALE.UTF-8
+export LANG=$LOCALE.UTF-8
+export LC_ALL=$LOCALE.UTF-8
+export LC_CTYPE=$LOCALE.UTF-8" >> /home/pi/.profile
+	. /home/pi/.profile
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
 
-#if [[ $(( $(date +%s) - $(stat -c %Y /var/cache/apt/) )) > $((3600 * 24)) ]]; then
-	sudo apt-get update
-#fi
-sudo apt-get -y install mplayer vim tightvncserver imagemagick build-essential curl expect cmake htop
+sudo apt-get update
+sudo apt-get -y install \
+	mplayer \
+	vim \
+	tightvncserver \
+	imagemagick \
+	build-essential \
+	curl \
+	expect \
+	cmake \
+	htop
 
-echo "replacing mplayer with correct libav version..."
+echo "replacing mplayer with correct libav gui-enabled version..."
 MPATH=$(dirname `which mplayer`)
-sudo mv mplayer `which mplayer`
+sudo cp $RASPIDEEP/content/mplayer `which mplayer`
 sudo ln -sf `which mplayer` $MPATH/gmplayer
-sudo mkdir -p /usr/local/share/mplayer/skins
-sudo mv mplayer_skin /usr/local/share/mplayer/skins/default
+SKINDIR="/usr/local/share/mplayer/skins"
+sudo mkdir -p $SKINDIR
+sudo cp -r $RASPIDEEP/content/mplayer_skin $SKINDIR/default
 
 echo "setting up PiTFT..."
-if ! grep -q "adafruit" /etc/apt/sources.list > /dev/null; then
+if ! grep -q "/dev/fb1" /home/pi/.profile > /dev/null; then
 	curl -SLs https://apt.adafruit.com/add | sudo bash
 	sudo apt-get install -y raspberrypi-bootloader
 	sudo apt-get install -y adafruit-pitft-helper
-fi
-sudo expect << EOF
+	sudo expect << EOF
 spawn {/usr/bin/sudo} {/usr/bin/adafruit-pitft-helper} -t 28r
 expect "Would you like the console to appear on the PiTFT display? \[y/n\] "
 send "y\r"
@@ -58,15 +65,15 @@ expect "Would you like GPIO #23 to act as a on/off button? \[y/n\] "
 send "y\r"
 exit
 EOF
-echo
-echo "\
+	echo
+	echo "\
 Section \"Device\"
   Identifier \"Adafruit PiTFT\"
   Driver \"fbdev\"
   Option \"fbdev\" \"/dev/fb1\"
 EndSection" | sudo tee /usr/share/X11/xorg.conf.d/99-pitft.conf > /dev/null
-if ! grep -q "pi1" /boot/config.txt > /dev/null; then
-	echo "\
+	if ! grep -q "pi1" /boot/config.txt > /dev/null; then
+		echo "\
 [pi1]
 device_tree=bcm2708-rpi-b-plus.dtb
 [pi2]
@@ -76,15 +83,17 @@ dtparam=spi=on
 dtparam=i2c1=on
 dtparam=i2c_arm=on
 dtoverlay=pitft28r,rotate=90,speed=32000000,fps=20" | sudo tee --append /boot/config.txt > /dev/null
-fi
-echo "\
+	fi
+	echo "\
 BLANK_TIME=0
 BLANK_DPMS=off
 POWERDOWN_TIME=0" | sudo tee /etc/kbd/config > /dev/null
+	sudo reboot
+fi
 
 echo "installing libs"
 if [ ! -f /opt/vc/lib/libbcm_host.so ]; then
-	sudo cp $RASPIDEEP/lib/* /opt/vc/lib/
+	sudo cp $RASPIDEEP/content/lib/* /opt/vc/lib/
 fi
 
 echo "setting vnc password"
@@ -126,19 +135,25 @@ echo "\
 ### END INIT INFO
 #!/bin/sh
 echo 'starting handheld...'
-$DIR/init.sh
-" | sudo tee /etc/init.d/setup > /dev/null
+$DIR/bin/control/init.sh" | sudo tee /etc/init.d/setup > /dev/null
 sudo chmod 755 /etc/init.d/setup
 sudo update-rc.d setup defaults
 
 echo "installing desktop shortcuts"
-sudo rm -r /home/pi/Desktop /home/pi/confirm 2> /dev/null
-cp -r $DIR/Desktop $DIR/confirm /home/pi
+sudo rm -r /home/pi/Desktop
+cp -r $DIR/content/Desktop /home/pi
+
+echo "initializing raspideep bin path..."
+if ! grep -q "/bin/service" /home/pi/.profile > /dev/null; then
+	echo '
+export PATH=$RASPIDEEP/bin/service:$PATH
+export PATH=$RASPIDEEP/bin/control:$PATH' >> /home/pi/.profile
+fi
 
 echo "initializing pcmanfm"
 export DISPLAY=:0
 pcmanfm
-sleep 1
+sleep 2
 sudo killall pcmanfm
 sudo service lightdm stop
 sudo service lightdm start
