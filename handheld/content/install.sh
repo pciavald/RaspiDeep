@@ -26,7 +26,7 @@ if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	export LANG=$LOCALE.UTF-8
 	export LC_ALL=$LOCALE.UTF-8
 	export LC_CTYPE=$LOCALE.UTF-8" >> /home/pi/.profile
-	source /home/pi/.profile
+	. /home/pi/.profile
 	sudo sed -i "s/^# $LOCALE.UTF-8/$LOCALE.UTF-8/" /etc/locale.gen
 	sudo locale-gen
 	sudo update-locale LANG=$LOCALE.UTF-8
