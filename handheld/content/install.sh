@@ -143,6 +143,13 @@ echo "installing desktop shortcuts"
 sudo rm -r /home/pi/Desktop
 cp -r $DIR/content/Desktop /home/pi
 
+echo "initializing raspideep bin path..."
+if ! grep -q "/bin/service" /home/pi/.profile > /dev/null; then
+	echo '
+export PATH=$RASPIDEEP/bin/service:$PATH
+export PATH=$RASPIDEEP/bin/control:$PATH' >> /home/pi/.profile
+fi
+
 echo "initializing pcmanfm"
 export DISPLAY=:0
 pcmanfm
