@@ -146,7 +146,7 @@ cp -r $DIR/content/Desktop /home/pi
 echo "initializing pcmanfm"
 export DISPLAY=:0
 pcmanfm
-sleep 1
+sleep 2
 sudo killall pcmanfm
 sudo service lightdm stop
 sudo service lightdm start
