@@ -50,7 +50,7 @@ sudo cp $RASPIDEEP/content/mplayer `which mplayer`
 sudo ln -sf `which mplayer` $MPATH/gmplayer
 SKINDIR="/usr/local/share/mplayer/skins"
 sudo mkdir -p $SKINDIR
-sudo cp $RASPIDEEP/content/mplayer_skin $SKINDIR/default
+sudo cp -r $RASPIDEEP/content/mplayer_skin $SKINDIR/default
 
 echo "setting up PiTFT..."
 if ! grep -q "adafruit" /etc/apt/sources.list > /dev/null; then
