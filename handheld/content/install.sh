@@ -24,10 +24,10 @@ if ! grep -q "$LOCALE" /home/pi/.profile > /dev/null; then
 	sudo sed -i "s/^# $LOCALE.UTF-8/$LOCALE.UTF-8/" /etc/locale.gen
 	sudo locale-gen
 	echo "\
-	export LANGUAGE=$LOCALE.UTF-8
-	export LANG=$LOCALE.UTF-8
-	export LC_ALL=$LOCALE.UTF-8
-	export LC_CTYPE=$LOCALE.UTF-8" >> /home/pi/.profile
+export LANGUAGE=$LOCALE.UTF-8
+export LANG=$LOCALE.UTF-8
+export LC_ALL=$LOCALE.UTF-8
+export LC_CTYPE=$LOCALE.UTF-8" >> /home/pi/.profile
 	. /home/pi/.profile
 	sudo update-locale LANG=$LOCALE.UTF-8
 fi
@@ -53,7 +53,7 @@ sudo mkdir -p $SKINDIR
 sudo cp -r $RASPIDEEP/content/mplayer_skin $SKINDIR/default
 
 echo "setting up PiTFT..."
-if ! grep -q "PiTFT" /home/pi/.profile > /dev/null; then
+if ! grep -q "/dev/fb1" /home/pi/.profile > /dev/null; then
 	curl -SLs https://apt.adafruit.com/add | sudo bash
 	sudo apt-get install -y raspberrypi-bootloader
 	sudo apt-get install -y adafruit-pitft-helper
@@ -88,7 +88,6 @@ dtoverlay=pitft28r,rotate=90,speed=32000000,fps=20" | sudo tee --append /boot/co
 BLANK_TIME=0
 BLANK_DPMS=off
 POWERDOWN_TIME=0" | sudo tee /etc/kbd/config > /dev/null
-	echo "PiTFT" >> /home/pi/profile
 	sudo reboot
 fi
 
