@@ -1,8 +1,7 @@
 #!/bin/sh
 
 connect.sh
-#TODO check key
-#TODO id_rsa
-sudo scp -r -i /home/pi/.ssh/id_rsa pi@192.168.42.1:/home/pi/RaspiDeep/beacon/capture* /mnt
+if -e 0 [ df -h | grep sda ]
+	sudo sshpass -praspbery scp -r pi@192.168.42.1:/home/pi/capture* /mnt
 disconnect.sh
 pcmanfm /mnt
