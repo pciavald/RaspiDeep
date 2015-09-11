@@ -2,7 +2,7 @@
 Name=Watch
 Comment="Watch what the camera sees"
 Icon=/usr/share/pixmaps/openbox.xpm
-Exec=sh -c "$RASPIDEEP/watch.sh"
+Exec=sh -c "watch.sh"
 Type=Application
 Encoding=UTF-8
 Terminal=false

@@ -2,7 +2,7 @@
 Name=Download
 Comment="Download camera contents"
 Icon=/usr/share/pixmaps/openbox.xpm
-Exec=sh -c "$RASPIDEEP/download.sh"
+Exec=sh -c "download.sh"
 Type=Application
 Encoding=UTF-8
 Terminal=true
