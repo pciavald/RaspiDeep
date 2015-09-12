@@ -1,6 +1,7 @@
 #!/bin/sh
 
 sudo service camstream stop
+sudo killall mjpeg-streamer
 sudo service hostapd stop
 sudo service udhcpd stop
 sudo ifconfig wlan0 down
