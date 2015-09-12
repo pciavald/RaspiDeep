@@ -6,7 +6,7 @@ sudo service udhcpd stop
 sudo ifconfig wlan0 down
 echo 0 | sudo tee /sys/class/leds/led0/brightness > /dev/null
 echo 1 | sudo tee /sys/class/leds/led1/brightness > /dev/null
-if [ -f /home/pi/RaspiDeep/record.sh ]; then
+if [ -f /home/pi/record.sh ]; then
 	sleep 1
 	echo 0 | sudo tee /sys/class/leds/led1/brightness > /dev/null
 	sleep 1
