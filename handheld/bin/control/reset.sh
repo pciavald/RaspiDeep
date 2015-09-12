@@ -1,5 +1,5 @@
 #!/bin/sh
 
 connect.sh
-ssh.sh "rm /home/pi/RaspiDeep/record.sh"
+ssh.sh "rm /home/pi/record.sh"
 disconnect.sh
