@@ -17,7 +17,7 @@ LOCALE="fr_FR"
 DIR=`pwd`
 if ! grep -q "RASPIDEEP" /home/pi/.profile > /dev/null; then
 	echo "export RASPIDEEP=$DIR" >> /home/pi/.profile
-	#sudo rpi-update
+	sudo rpi-update
 	sudo raspi-config # expand filesystem, enable camera
 	sudo reboot
 	exit 0
