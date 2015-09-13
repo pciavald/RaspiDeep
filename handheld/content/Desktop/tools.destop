@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=ERASE
+Name=Tools
 Comment="Erase content of camera"
 Icon=/usr/share/pixmaps/openbox.xpm
 Exec=sh -c "xdg-open $RASPIDEEP/bin/tools"
