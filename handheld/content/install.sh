@@ -44,7 +44,8 @@ sudo apt-get -y install \
 	curl \
 	expect \
 	cmake \
-	htop
+	htop \
+	ntfs-3g
 
 echo "replacing mplayer with correct libav gui-enabled version..."
 MPATH=$(dirname `which mplayer`)
