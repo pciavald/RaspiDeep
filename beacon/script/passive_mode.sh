@@ -3,7 +3,7 @@
 sudo service camstream stop
 sudo service hostapd stop
 sudo service udhcpd stop
-sudo ifconfig wlan0 down
+sudo ifdown --force wlan0
 echo 0 | sudo tee /sys/class/leds/led0/brightness > /dev/null
 echo 1 | sudo tee /sys/class/leds/led1/brightness > /dev/null
 if [ -f /home/pi/record.sh ]; then
