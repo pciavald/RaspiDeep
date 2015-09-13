@@ -43,6 +43,11 @@ ShowHidden=false
 Sort=gicon;ascending;
 ViewMode=compact
 ShowHidden=false
+
+[/mnt]
+Sort=gicon;ascending;
+ViewMode=compact
+ShowHidden=false
 " >> /home/pi/.config/libfm/dir-settings.conf
 #TODO set wallpaper
 
