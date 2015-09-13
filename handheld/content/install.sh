@@ -142,13 +142,13 @@ echo "\
 ### END INIT INFO
 #!/bin/sh
 echo 'starting handheld...'
-$DIR/bin/control/init.sh" | sudo tee /etc/init.d/setup > /dev/null
+$RASPIDEEP/bin/control/init.sh" | sudo tee /etc/init.d/setup > /dev/null
 sudo chmod 755 /etc/init.d/setup
 sudo update-rc.d setup defaults
 
 echo "installing desktop shortcuts"
 sudo rm -r /home/pi/Desktop
-cp -r $DIR/content/Desktop /home/pi
+cp -r $RASPIDEEP/content/Desktop /home/pi
 
 echo "initializing raspideep bin path..."
 if ! grep -q "/bin/service" /home/pi/.profile > /dev/null; then
