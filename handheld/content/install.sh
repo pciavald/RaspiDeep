@@ -8,7 +8,7 @@ PASS="Raspberry71"
 
 LOCALE="fr_FR"
 
-#TODO save whole desktop, change password
+#TODO camera led
 
 #"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
 
