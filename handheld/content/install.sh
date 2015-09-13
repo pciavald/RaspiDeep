@@ -110,6 +110,8 @@ EOF
 echo
 
 echo "setting up interfaces..."
+sudo cp $RASPIDEEP/content/network/iptables /etc/network/iptables
+echo $PASS | wpa_passphrase $SSID | sudo tee /etc/wpa_supplicant.conf > /dev/null
 echo "\
 auto lo
   iface lo inet loopback
@@ -119,8 +121,10 @@ iface wlan0 inet manual
   wpa-roam /etc/wpa_supplicant.conf
 iface default inet static
   address 192.168.42.2
-  gateway 192.168.42.1" | sudo tee /etc/network/interfaces > /dev/null
-echo $PASS | wpa_passphrase $SSID | sudo tee /etc/wpa_supplicant.conf > /dev/null
+  gateway 192.168.42.1
+pre-up iptables-restore < /etc/network/iptables" | sudo tee /etc/network/interfaces > /dev/null
+sudo sed -i "s/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/" /etc/sysctl.conf
+sudo sysctl --system
 
 echo "generating startup script..."
 echo "\
