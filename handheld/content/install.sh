@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# https://rbnrpi.wordpress.com/project-list/wifi-to-ethernet-adapter-for-an-ethernet-ready-tv/
+
 # settings for WiFi access point
 SSID="Ocean71"
 PASS="Raspberry71"
