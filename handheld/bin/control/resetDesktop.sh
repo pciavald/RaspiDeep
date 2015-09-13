@@ -37,7 +37,13 @@ echo "\
 [/home/pi/Desktop/confs]
 Sort=gicon;ascending;
 ViewMode=compact
-ShowHidden=false" >> /home/pi/.config/libfm/dir-settings.conf
+ShowHidden=false
+
+[$RASPIDEEP/bin/tools]
+Sort=gicon;ascending;
+ViewMode=compact
+ShowHidden=false
+" >> /home/pi/.config/libfm/dir-settings.conf
 #TODO set wallpaper
 
 sudo service lightdm stop
