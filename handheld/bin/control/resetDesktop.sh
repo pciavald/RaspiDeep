@@ -39,3 +39,6 @@ Sort=gicon;ascending;
 ViewMode=compact
 ShowHidden=false" >> /home/pi/.config/libfm/dir-settings.conf
 #TODO set wallpaper
+
+sudo service lightdm stop
+sudo service lightdm start
