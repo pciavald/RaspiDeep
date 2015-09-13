@@ -2,6 +2,7 @@
 
 connect.sh
 ssh.sh "
-sudo rm -rf /home/pi/RaspiDeep/capture*
-sudo rm /home/pi/RaspiDeep/record.sh"
+rm -rf /home/pi/RaspiDeep/capture*
+rm /home/pi/RaspiDeep/record.sh"
+#TODO display remaining space on card
 disconnect.sh
