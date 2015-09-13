@@ -91,6 +91,7 @@ BLANK_TIME=0
 BLANK_DPMS=off
 POWERDOWN_TIME=0" | sudo tee /etc/kbd/config > /dev/null
 	sudo reboot
+	exit 0
 fi
 
 echo "installing libs"
