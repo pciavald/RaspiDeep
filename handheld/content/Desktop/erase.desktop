@@ -2,7 +2,7 @@
 Name=ERASE
 Comment="Erase content of camera"
 Icon=/usr/share/pixmaps/openbox.xpm
-Exec=xdg-open "$RASPIDEEP/content/confirm"
+Exec=sh -c "xdg-open $RASPIDEEP/content/confirm"
 Type=Application
 Encoding=UTF-8
 Terminal=false
