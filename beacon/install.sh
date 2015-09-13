@@ -116,6 +116,7 @@ auto eth0
 iface wlan0 inet static
   address 192.168.42.1
   netmask 255.255.255.0
+  # TODO add route
 auto wlan1
   iface wlan1 inet dhcp" | sudo tee /etc/network/interfaces > /dev/null
 sudo ifconfig wlan0 up
@@ -170,4 +171,3 @@ send "n"
 exit
 EOF
 echo
-sudo service vnc start #TODO password ?
