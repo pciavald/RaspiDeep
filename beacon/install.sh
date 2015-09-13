@@ -112,15 +112,15 @@ echo "\
 auto lo
   iface lo inet loopback
 auto eth0
+  allow-hotplug eth0
   iface eth0 inet dhcp
 iface wlan0 inet static
   address 192.168.42.1
   netmask 255.255.255.0
-  # TODO add route
+  pre-up ifconfig wlan0 192.168.42.1
+  pre-up route add -net 0.0.0.0 gw 192.168.42.2 wlan0
 auto wlan1
   iface wlan1 inet dhcp" | sudo tee /etc/network/interfaces > /dev/null
-sudo ifconfig wlan0 up
-sudo ifconfig wlan0 192.168.42.1
 
 echo "make it responsible for its network..."
 if ! grep -q "\nauthoritative" /etc/dhcp/dhcpd.conf > /dev/null; then
