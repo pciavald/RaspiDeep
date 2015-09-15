@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Download
-Comment="Relever le contenu de la camera"
-Icon=/usr/share/pixmaps/openbox.xpm
-Exec=sh -c "/home/pi/RaspiDeep/download.sh"
-Type=Application
-Encoding=UTF-8
-Terminal=true
-Categories=None;

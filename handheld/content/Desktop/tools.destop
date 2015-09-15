@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Tools
+Comment="Erase content of camera"
+Icon=/usr/share/pixmaps/openbox.xpm
+Exec=sh -c "xdg-open $RASPIDEEP/bin/tools"
+Type=Application
+Encoding=UTF-8
+Terminal=false
+Categories=None;
